@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in svm_helper.gemspec
 gemspec
 
-group :test, :development do
+group :development do
   gem 'yard'
   gem 'kramdown'
   gem 'github-markup'
