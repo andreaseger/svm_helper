@@ -7,7 +7,7 @@ module Selector
   #
   class Simple
     # stopword file
-    STOPWORD_LOCATION = File.join('lib','svm_helper','stopwords')
+    STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
     # default dictionary size
     DEFAULT_DICTIONARY_SIZE = 5000
 
