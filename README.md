@@ -2,6 +2,8 @@
 
 Shared helper classes for usage in context of SVM at experteer
 
+[![Build Status](https://travis-ci.org/sch1zo/svm_helper.png?branch=master)](https://travis-ci.org/sch1zo/svm_helper)
+
 ## Installation
 
 Add this line to your application's Gemfile:

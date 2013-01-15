@@ -47,7 +47,7 @@ module Preprocessor
     def clean_title title
       title.gsub(GENDER_FILTER,'').
             gsub(SYMBOL_FILTER,'').
-            gsub(/\((?<annotation>([a-zA-Z]+))\)/, '\k<annotation>').
+            gsub(/\(([a-zA-Z]+)\)/, '\1').
             gsub(CODE_TOKEN_FILTER,'').
             gsub(WHITESPACE,' ').
             downcase.
@@ -64,7 +64,7 @@ module Preprocessor
           .gsub(NEW_LINES,'')
           .gsub(SYMBOL_FILTER,' ')
           .gsub(WHITESPACE,' ')
-          .gsub(/\((?<annotation>([a-zA-Z ]+))\)/, '\k<annotation>')
+          .gsub(/\(([a-zA-Z ]+)\)/, '\1')
           .gsub(CODE_TOKEN_FILTER,'')
           .downcase
           .strip

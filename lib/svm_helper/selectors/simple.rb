@@ -7,6 +7,7 @@ module Selector
   #
   class Simple
     # stopword file
+    #TODO use File.expand_path
     STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
     # default dictionary size
     DEFAULT_DICTIONARY_SIZE = 5000
