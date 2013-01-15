@@ -26,9 +26,4 @@ FactoryGirl.define do
   factory :data_w_multiple_sections, parent: :data do
     data ["meeh foo auto","bz baaz fooo 2"]
   end
-
-  sequence(:value) {|i| [OpenStruct.new(cost: i*10, gamma: i*(-5)), i*11] }
-  factory :future, class: OpenStruct do
-    value
-  end
 end
