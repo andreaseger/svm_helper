@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["dev@eger-andreas.de"]
   gem.description   = %q{Shared helper classes for usage in context of SVM at experteer}
   gem.summary       = %q{Preprocessor and Selector classes to generate FeatureVectors from Job data}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/sch1zo/svm_helper"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
