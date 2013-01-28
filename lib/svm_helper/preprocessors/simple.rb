@@ -45,7 +45,7 @@ module Preprocessor
     #
     # @return [String] clean and lowercase version of input
     def clean_title title
-      title.force_encoding('UTF-8').gsub(GENDER_FILTER,'').
+      title.gsub(GENDER_FILTER,'').
             gsub(SYMBOL_FILTER,'').
             gsub(/\(([a-zA-Z]+)\)/, '\1').
             gsub(CODE_TOKEN_FILTER,'').
@@ -59,7 +59,7 @@ module Preprocessor
     #
     # @return [String] clean and lowercase version of input
     def clean_description desc
-      desc.force_encoding('UTF-8').gsub(XML_TAG_FILTER,' ')
+      desc.gsub(XML_TAG_FILTER,' ')
           .gsub(GENDER_FILTER,'')
           .gsub(NEW_LINES,'')
           .gsub(SYMBOL_FILTER,' ')
