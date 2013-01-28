@@ -19,7 +19,11 @@ module Preprocessor
     #
     # @return [Boolean]
     def correct? job
-      job.qc_job_check.send("wrong_#{@classification}_id").nil?
+      if (qc = job.qc_job_check).nil?
+        false
+      else
+        qc.send("wrong_#{@classification}_id").nil?
+      end
     end
 
     def map_industry_id(id)

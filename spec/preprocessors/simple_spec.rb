@@ -6,8 +6,30 @@ describe Preprocessor::Simple do
 
   let(:simple) { Preprocessor::Simple.new(industry_map: {}) }
   it "should have process implemented" do
-    expect { simple.process([], :function) }.to_not raise_error
+    -> { simple.process([], :function) }.should_not raise_error
   end
+  it "should work with jobs with quality check" do
+    jobs = FactoryGirl.build_list :job, 3
+    -> {simple.process(jobs, :function) }.should_not raise_error
+  end
+  it "should set labels to true if quality check exists and no wrong_ label set" do
+    jobs = FactoryGirl.build_list :job, 3
+    simple.process(jobs, :career_level).each{|e| e.label.should be_true}
+  end
+  it "should set labels to false if quality check exists and wrong_ label is set" do
+    jobs = FactoryGirl.build_list :job, 3
+    simple.process(jobs, :function).each{|e| e.label.should be_false}
+  end
+
+  it "should work with jobs without quality check" do
+    jobs = FactoryGirl.build_list :job_without_job_check, 3
+    -> {simple.process(jobs, :function) }.should_not raise_error
+  end
+  it "should set labels to false if no quality check" do
+    jobs = FactoryGirl.build_list :job_without_job_check, 3
+    simple.process(jobs, :function).each{|e| e.label.should be_false}
+  end
+
   context "processing" do
     let(:jobs) { FactoryGirl.build_list(:job,3) }
     before(:each) do
