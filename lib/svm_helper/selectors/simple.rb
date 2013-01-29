@@ -27,6 +27,7 @@ module Selector
 
     def initialize args={}
       @global_dictionary = args.fetch(:global_dictionary) {[]}
+      @language = args.fetch(:language){'en'}
     end
 
     #
@@ -64,12 +65,11 @@ module Selector
 
     #
     # loads a txt file with stop words
-    # @param  language String either 'de' or 'en'
     # @param  location String folder with stopword lists
     #
     # @return [Array<String>] Array of stopwords
-    def stopwords(language='de',location=STOPWORD_LOCATION)
-      @stopwords ||= IO.read(File.join(location,language)).split
+    def stopwords(location=STOPWORD_LOCATION)
+      @stopwords ||= IO.read(File.join(location,@language)).split
     end
 
     #
