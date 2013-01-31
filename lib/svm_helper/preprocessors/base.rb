@@ -16,13 +16,14 @@ module Preprocessor
     #
     # checks if the job was classified correctly
     # @param job [Job]
+    # @param classification [symbol]
     #
     # @return [Boolean]
-    def correct? job
+    def correct? job, classification
       if (qc = job.qc_job_check).nil?
         false
       else
-        qc.send("wrong_#{@classification}_id").nil?
+        qc.send("wrong_#{classification}_id").nil?
       end
     end
 

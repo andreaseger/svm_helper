@@ -5,7 +5,7 @@ describe Selector::Simple do
   
   let(:simple) { Selector::Simple.new }
   it "should have select_feature_vector implemented" do
-    expect { simple.generate_vectors([], :function) }.to_not raise_error
+    expect { simple.generate_vectors([]) }.to_not raise_error
   end
   context "#stopwords" do
     it "simply loads them from a file"
@@ -53,7 +53,7 @@ describe Selector::Simple do
   context "#generate_vector" do
     let(:dictionary) { %w(auto pferd haus hase garten) }
     let(:data) { FactoryGirl.build(:data) }
-    let(:vector) { simple.generate_vector(data, :career_level) }
+    let(:vector) { simple.generate_vector(data).tap{|e| e.career_level! } }
 
     before(:each) do
       simple.stubs(:global_dictionary).returns(dictionary)
@@ -75,11 +75,12 @@ describe Selector::Simple do
     end
     it "should call make_vector" do
       simple.expects(:make_vector).once
-      vector
+      simple.generate_vector(data)
     end
     context "custom dictionary" do
       it "should accept a custom dictionary" do
-        vector = simple.generate_vector(data, :career_level, %w(pferd flasche glas))
+        vector = simple.generate_vector(data, %w(pferd flasche glas))
+        vector.career_level!
         vector.data.should eq([[1,0,0],[0,0,0,0,0,0,1,0]].flatten)
       end
     end
@@ -93,17 +94,17 @@ describe Selector::Simple do
     end
     it "should call extract words" do
       simple.expects(:extract_words).returns([])
-      simple.generate_vectors(data, :function)
+      simple.generate_vectors(data)
     end
     it "should call generate_global_dictionary" do
       simple.stubs(:extract_words).returns([])
       simple.expects(:generate_global_dictionary).returns([])
-      simple.generate_vectors(data, :function)
+      simple.generate_vectors(data)
     end
     it "should call make_vector for each set of words" do
       simple.stubs(:extract_words).returns(words_per_data)
       simple.expects(:make_vector).twice
-      simple.generate_vectors(data, :function)
+      simple.generate_vectors(data)
     end
   end
 end

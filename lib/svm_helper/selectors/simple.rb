@@ -1,4 +1,3 @@
-require_relative '../interfaces'
 module Selector
   #
   # Selector which uses a simple dictionary to generate feature vectors
@@ -23,7 +22,6 @@ module Selector
                           end
 
     attr_accessor :global_dictionary
-    attr_accessor :classification
 
     def initialize args={}
       @global_dictionary = args.fetch(:global_dictionary) {[]}
@@ -33,34 +31,28 @@ module Selector
     #
     # generates a list of feature vetors and their labels from preprocessed data
     # @param  data_set [Array<PreprocessedData>] list of preprocessed data
-    # @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @param  dictionary_size [Integer] Size of a dictionary to create if non exists
     #
     # @return [Array<FeatureVector>] list of feature vectors and labels
-    def generate_vectors data_set, classification, dictionary_size=DEFAULT_DICTIONARY_SIZE
-      @classification = classification
+    def generate_vectors data_set, dictionary_size=DEFAULT_DICTIONARY_SIZE
       words_per_data = extract_words data_set
       generate_global_dictionary words_per_data, dictionary_size
 
       words_per_data.map.with_index{|words,index|
         word_set = words.uniq
-        make_vector word_set,
-                    data_set[index].send("#{classification.to_s}_id"),
-                    data_set[index].label
+        make_vector word_set, data_set[index]
       }
     end
 
     #
     # generates a feature vector with its label
     # @param  data [PreprocessedData]
-    # @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @param  dictionary [Array] dictionary to use for this selection
     #
     # @return [FeatureVector]
-    def generate_vector data, classification, dictionary=global_dictionary
-      @classification = classification
+    def generate_vector data, dictionary=global_dictionary
       word_set = Set.new extract_words_from_data(data)
-      make_vector word_set, data.send("#{classification.to_s}_id"), data.label, dictionary
+      make_vector word_set, data, dictionary
     end
 
     #
@@ -118,27 +110,34 @@ module Selector
     # creates a feature vector for the given words, classification and dictionary
     # also adds the label
     # @param  words [Array<String>] list of words
-    # @param  classification_id [Integer] classification id given for the data entry
-    # @param  label [Boolean] was that classi
+    # @param  data [PreprocessedData]
     # @param  dictionary
     #
     # @return [FeatureVector]
-    def make_vector words, classification_id, label, dictionary=global_dictionary
+    def make_vector words, data, dictionary=global_dictionary
       FeatureVector.new(
-        data: dictionary.map{|dic_word|
+        word_data: dictionary.map{|dic_word|
                 words.include?(dic_word) ? 1 : 0
-              }.concat(classification_array(classification_id)),
-        label: label ? 1 : 0
+              },
+        classification_arrays: {
+          function: classification_array(data.ids, :function),
+          industry: classification_array(data.ids, :industry),
+          career_level: classification_array(data.ids, :career_level) },
+        labels: {
+          function: data.labels[:function] ? 1 : 0,
+          industry: data.labels[:industry] ? 1 : 0,
+          career_level: data.labels[:career_level] ? 1 : 0 }
       )
     end
 
     #
     # creates the classification specific part of the feature vector
-    # @param  id [Integer] classification_id
+    # @param  ids [Hash] hash with classification ids
     #
     # @return [Array<Integer>] list of size=count(classifcation_ids) with only one not zero item
-    def classification_array(id)
-      Array.new(CLASSIFICATIONS_SIZE[classification.to_sym]){|n| n==(id-1) ? 1 : 0}
+    def classification_array(ids, classification)
+      id = ids[classification]
+      Array.new(CLASSIFICATIONS_SIZE[classification]){|n| n==(id-1) ? 1 : 0}
     end
   end
 end

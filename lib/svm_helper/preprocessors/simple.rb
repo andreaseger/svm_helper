@@ -30,8 +30,7 @@ module Preprocessor
     #   @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     #
     # @return [Array<PreprocessedData>] list of processed job data - or singe job data
-    def process jobs, classification
-      @classification = classification
+    def process jobs
       if jobs.respond_to? :map
         jobs.map{|job| process_job job }
       else
@@ -74,10 +73,14 @@ module Preprocessor
     def process_job job
       PreprocessedData.new(
         data: [ clean_title(job.title), clean_description(job.description) ],
-        industry_id: map_industry_id(job.original_industry_id),
-        function_id: job.original_function_id,
-        career_level_id: job.original_career_level_id,
-        label: correct?(job)
+        ids: {
+          industry: map_industry_id(job.original_industry_id),
+          function: job.original_function_id,
+          career_level: job.original_career_level_id },
+        labels: {
+          industry: correct?(job, :industry),
+          function: correct?(job, :function),
+          career_level: correct?(job, :career_level) }
       )
     end
   end

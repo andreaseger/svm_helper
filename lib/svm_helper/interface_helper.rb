@@ -30,6 +30,7 @@ class InterfaceHelper
     params.each do |key, value|
       send("#{key}=", value)
     end
+    @_attributes[:classification] ||= :function
   end
 
   #
@@ -40,25 +41,17 @@ class InterfaceHelper
   def == anOther
     @_attributes.keys.map{ |sym| self.send(sym) == anOther.send(sym)}.reduce(true){|a,e| a && e }
   end
-end
 
-#
-# FeatureVector interface
-#
-# @author Andreas Eger
-class FeatureVector < InterfaceHelper
-  attribute :data
-  attribute :label
-end
-
-#
-# PreprocessedData interface
-#
-# @author Andreas Eger
-class PreprocessedData < InterfaceHelper
-  attribute :data
-  attribute :industry_id
-  attribute :function_id
-  attribute :career_level_id
-  attribute :label
+  def industry!
+    @_attributes[:classification] = :industry
+  end
+  def function!
+    @_attributes[:classification] = :function
+  end
+  def career_level!
+    @_attributes[:classification] = :career_level
+  end
+  def classification
+    @_attributes[:classification]
+  end
 end
