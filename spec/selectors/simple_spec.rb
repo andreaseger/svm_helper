@@ -79,8 +79,7 @@ describe Selector::Simple do
     end
     context "custom dictionary" do
       it "should accept a custom dictionary" do
-        vector = simple.generate_vector(data, %w(pferd flasche glas))
-        vector.career_level!
+        vector = simple.generate_vector(data, :career_level, %w(pferd flasche glas))
         vector.data.should eq([[1,0,0],[0,0,0,0,0,0,1,0]].flatten)
       end
     end

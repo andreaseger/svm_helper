@@ -31,28 +31,30 @@ module Selector
     #
     # generates a list of feature vetors and their labels from preprocessed data
     # @param  data_set [Array<PreprocessedData>] list of preprocessed data
+    # @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @param  dictionary_size [Integer] Size of a dictionary to create if non exists
     #
     # @return [Array<FeatureVector>] list of feature vectors and labels
-    def generate_vectors data_set, dictionary_size=DEFAULT_DICTIONARY_SIZE
+    def generate_vectors data_set, classification=:function, dictionary_size=DEFAULT_DICTIONARY_SIZE
       words_per_data = extract_words data_set
       generate_global_dictionary words_per_data, dictionary_size
 
       words_per_data.map.with_index{|words,index|
         word_set = words.uniq
-        make_vector word_set, data_set[index]
+        make_vector word_set, data_set[index], classification
       }
     end
 
     #
     # generates a feature vector with its label
     # @param  data [PreprocessedData]
+    # @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @param  dictionary [Array] dictionary to use for this selection
     #
     # @return [FeatureVector]
-    def generate_vector data, dictionary=global_dictionary
+    def generate_vector data, classification=:function, dictionary=global_dictionary
       word_set = Set.new extract_words_from_data(data)
-      make_vector word_set, data, dictionary
+      make_vector word_set, data, classification, dictionary
     end
 
     #
@@ -101,7 +103,6 @@ module Selector
 
     def reset classification
       @global_dictionary = []
-      @classification = classification
     end
 
     private
@@ -111,10 +112,11 @@ module Selector
     # also adds the label
     # @param  words [Array<String>] list of words
     # @param  data [PreprocessedData]
+    # @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @param  dictionary
     #
     # @return [FeatureVector]
-    def make_vector words, data, dictionary=global_dictionary
+    def make_vector words, data, classification, dictionary=global_dictionary
       FeatureVector.new(
         word_data: dictionary.map{|dic_word|
                 words.include?(dic_word) ? 1 : 0
@@ -127,7 +129,7 @@ module Selector
           function: data.labels[:function] ? 1 : 0,
           industry: data.labels[:industry] ? 1 : 0,
           career_level: data.labels[:career_level] ? 1 : 0 }
-      )
+      ).tap{|e| e.send("#{classification}!")}
     end
 
     #
