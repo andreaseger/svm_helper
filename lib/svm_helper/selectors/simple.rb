@@ -101,7 +101,7 @@ module Selector
       (data.data.flat_map(&:split) - stopwords).delete_if { |e| e.size <= 3 }
     end
 
-    def reset classification
+    def reset
       @global_dictionary = []
     end
 
