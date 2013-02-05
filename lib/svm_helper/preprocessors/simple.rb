@@ -20,6 +20,9 @@ module Preprocessor
     # filter for new lines
     NEW_LINES = /(\r\n)|\r|\n/
 
+    def label
+      "simple"
+    end
     #
     # cleans provided jobs
     # @overload process(jobs, classification)

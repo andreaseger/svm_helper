@@ -13,6 +13,9 @@ module Selector
       @gram_size = args.fetch(:gram_size) { 2 }
     end
 
+    def label
+      "ngram"
+    end
     #
     # fetches all words snippets from one data entry, removes stopwords and very short words
     # @param  data [PreprocessedData]

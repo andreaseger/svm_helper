@@ -28,6 +28,10 @@ module Selector
       @language = args.fetch(:language){'en'}
     end
 
+    def label
+      "simple"
+    end
+
     #
     # generates a list of feature vetors and their labels from preprocessed data
     # @param  data_set [Array<PreprocessedData>] list of preprocessed data
