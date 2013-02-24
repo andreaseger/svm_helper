@@ -77,13 +77,13 @@ module Preprocessor
       PreprocessedData.new(
         data: [ clean_title(job.title), clean_description(job.description) ],
         ids: {
-          industry: map_industry_id(job.original_industry_id),
-          function: job.original_function_id,
-          career_level: job.original_career_level_id },
+          industry: map_industry_id(job.classification_id(:industry)),
+          function: job.classification_id(:function),
+          career_level: job.classification_id(:career_level) },
         labels: {
-          industry: correct?(job, :industry),
-          function: correct?(job, :function),
-          career_level: correct?(job, :career_level) }
+          industry: job.label(:industry),
+          function: job.label(:function),
+          career_level: job.label(:career_level) }
       ).tap{|e| e.send("#{classification}!")}
     end
   end

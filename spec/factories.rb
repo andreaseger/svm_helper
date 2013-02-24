@@ -12,9 +12,6 @@ FactoryGirl.define do
     description "Foo Bar"
     summary "Really lot of work to do"
     qc_job_check
-    original_industry_id 1423
-    original_function_id 666
-    original_career_level_id 333
   end
 
   factory :job_without_job_check, class: OpenStruct do
