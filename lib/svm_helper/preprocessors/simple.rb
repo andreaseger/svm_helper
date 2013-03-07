@@ -1,12 +1,11 @@
 # encoding: UTF-8
-require_relative 'base'
 module Preprocessor
   #
   # Preprocessor which just cleans to text
   #
   # @author Andreas Eger
   #
-  class Simple < Preprocessor::Base
+  class Simple
     # filters most gender stuff
     GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
     # filters most wierd symbols
@@ -19,6 +18,9 @@ module Preprocessor
     CODE_TOKEN_FILTER = /\[.*\]|\(.*\)|\{.*\}|\d+\w+/
     # filter for new lines
     NEW_LINES = /(\r\n)|\r|\n/
+
+    def initialize args={}
+    end
 
     def label
       "simple"

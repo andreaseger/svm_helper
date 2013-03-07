@@ -11,6 +11,6 @@ notification :tmux,
   :display_message => true,
   :timeout => 3 # in seconds
 
-guard 'yard' do
-  watch(%r{lib/.+\.rb})
-end
+# guard 'yard' do
+#   watch(%r{lib/.+\.rb})
+# end
