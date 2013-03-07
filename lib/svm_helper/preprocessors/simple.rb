@@ -77,7 +77,7 @@ module Preprocessor
       PreprocessedData.new(
         data: [ clean_title(job.title), clean_description(job.description) ],
         ids: {
-          industry: map_industry_id(job.classification_id(:industry)),
+          industry: job.classification_id(:industry),
           function: job.classification_id(:function),
           career_level: job.classification_id(:career_level) },
         labels: {

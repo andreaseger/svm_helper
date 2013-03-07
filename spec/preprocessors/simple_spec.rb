@@ -4,7 +4,7 @@ require 'spec_helper'
 describe Preprocessor::Simple do
   it_behaves_like 'a preprocessor'
 
-  let(:simple) { Preprocessor::Simple.new(industry_map: {}) }
+  let(:simple) { Preprocessor::Simple.new }
   it "should have process implemented" do
     -> { simple.process([]) }.should_not raise_error
   end

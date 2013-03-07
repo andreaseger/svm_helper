@@ -11,15 +11,20 @@ module Selector
     # default dictionary size
     DEFAULT_DICTIONARY_SIZE = 5000
 
-    CLASSIFICATIONS_SIZE= if defined?(Pjpp) == 'constant'
-                            { function: Pjpp::Function.count,
-                              industry: Pjpp::Industry.count,
-                              career_level: Pjpp::CareerLevel.count }
-                          else
-                            { function: 19,       # 1..19
-                              industry: 632,      # 1..14370 but not all ids used
-                              career_level: 8 }   # 1..8
-                          end
+    # CLASSIFICATIONS_SIZE= if defined?(Pjpp) == 'constant'
+    #                         { function: Pjpp::Function.count,
+    #                           industry: Pjpp::Industry.count,
+    #                           career_level: Pjpp::CareerLevel.count }
+    #                       else
+    #                         { function: 19,       # 1..19
+    #                           industry: 632,      # 1..14370 but not all ids used
+    #                           career_level: 8 }   # 1..8
+    #                       end
+
+    CLASSIFICATIONS_SIZE = {
+          function: 8,         # max id 255, currently 19
+          industry: 16,       # max id 65535, currently 14370
+          career_level: 4 } # max id 15, currently 8
 
     attr_accessor :global_dictionary
 
@@ -143,7 +148,16 @@ module Selector
     # @return [Array<Integer>] list of size=count(classifcation_ids) with only one not zero item
     def classification_array(ids, classification)
       id = ids[classification]
-      Array.new(CLASSIFICATIONS_SIZE[classification]){|n| n==(id-1) ? 1 : 0}
+      # Array.new(CLASSIFICATIONS_SIZE[classification]){|n| n==(id-1) ? 1 : 0}
+      number_to_binary_array(id, CLASSIFICATIONS_SIZE[classification])
+    end
+
+    def number_to_binary_array(number, size=8)
+      a=[]
+      (size-1).downto(0) do |i|
+        a<<number[i]
+      end
+      a
     end
   end
 end
