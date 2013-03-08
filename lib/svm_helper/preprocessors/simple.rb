@@ -9,7 +9,7 @@ module Preprocessor
     # filters most gender stuff
     GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
     # filters most wierd symbols
-    SYMBOL_FILTER = %r{/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\|(\S*(&|;)\S*)}
+    SYMBOL_FILTER = %r{/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}
     # filters multiple whitesspace
     WHITESPACE = /(\s| )+/
     # filters all kind of XMl/HTML tags
