@@ -7,17 +7,20 @@ module Preprocessor
   #
   class Simple
     # filters most gender stuff
-    GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
+    GENDER_FILTER = '(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)'
     # filters most wierd symbols
-    SYMBOL_FILTER = %r{/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}
+    SYMBOL_FILTER = '/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}'
+    # urls and email filter
+    URL_FILTER = '(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?'
+    EMAIL_FILTER = '([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})'
     # filters multiple whitesspace
     WHITESPACE = /(\s| )+/
     # filters all kind of XMl/HTML tags
     XML_TAG_FILTER = /<(.*?)>/
     # filter for used job tokens
-    CODE_TOKEN_FILTER = /\[.*\]|\(.*\)|\{.*\}|\d+\w+/
+    CODE_TOKEN_FILTER = /\[[^\]]*\]|\([^\)]*\)|\{[^\}]*\}|\S*\d+\w+/
     # filter for new lines
-    NEW_LINES = /(\r\n)|\r|\n/
+    NEW_LINES = '(\r\n)|\r|\n'
 
     def initialize args={}
     end
@@ -49,13 +52,12 @@ module Preprocessor
     #
     # @return [String] clean and lowercase version of input
     def clean_title title
-      title.gsub(GENDER_FILTER,'').
-            gsub(SYMBOL_FILTER,'').
-            gsub(/\(([a-zA-Z]+)\)/, '\1').
-            gsub(CODE_TOKEN_FILTER,'').
-            gsub(WHITESPACE,' ').
-            downcase.
-            strip
+      title.gsub(/#{GENDER_FILTER}|#{SYMBOL_FILTER}/,'')
+           .gsub(/\(([a-zA-Z]+)\)/, '\1')
+           .gsub(CODE_TOKEN_FILTER,'')
+           .gsub(WHITESPACE,' ')
+           .downcase
+           .strip
     end
     #
     # converts string into a cleaner version
@@ -64,12 +66,10 @@ module Preprocessor
     # @return [String] clean and lowercase version of input
     def clean_description desc
       desc.gsub(XML_TAG_FILTER,' ')
-          .gsub(GENDER_FILTER,'')
-          .gsub(NEW_LINES,'')
-          .gsub(SYMBOL_FILTER,' ')
-          .gsub(WHITESPACE,' ')
+          .gsub(/(#{URL_FILTER})|(#{EMAIL_FILTER})|#{GENDER_FILTER}|#{SYMBOL_FILTER}|#{NEW_LINES}/,'')
           .gsub(/\(([a-zA-Z ]+)\)/, '\1')
           .gsub(CODE_TOKEN_FILTER,'')
+          .gsub(WHITESPACE,' ')
           .downcase
           .strip
     end

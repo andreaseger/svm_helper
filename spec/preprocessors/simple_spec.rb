@@ -104,7 +104,7 @@ describe Preprocessor::Simple do
     end
     it "should remove gender tokens" do
       desc = simple.clean_description(jobs[3].description)
-      desc.should_not match(%r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)|mw})
+      desc.should_not match(%r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)})
     end
     it "should remove job code token" do
       desc = simple.clean_description(jobs[4].description)
