@@ -13,14 +13,18 @@ module Preprocessor
     # urls and email filter
     URL_FILTER = '(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?'
     EMAIL_FILTER = '([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})'
+    # filter for new lines
+    NEW_LINES = '(\r\n)|\r|\n'
+    
+    SYM_GENDER_REGEX = /#{GENDER_FILTER}|#{SYMBOL_FILTER}/
+    MULTI_CLEANUP = /(#{URL_FILTER})|(#{EMAIL_FILTER})|#{GENDER_FILTER}|#{SYMBOL_FILTER}|#{NEW_LINES}/
+    WORDS_IN_BRACKETS = /\(([a-zA-Z]+)\)/
     # filters multiple whitesspace
     WHITESPACE = /(\s| )+/
     # filters all kind of XMl/HTML tags
     XML_TAG_FILTER = /<(.*?)>/
     # filter for used job tokens
     CODE_TOKEN_FILTER = /\[[^\]]*\]|\([^\)]*\)|\{[^\}]*\}|\S*\d+\w+/
-    # filter for new lines
-    NEW_LINES = '(\r\n)|\r|\n'
 
     def initialize args={}
     end
@@ -52,8 +56,8 @@ module Preprocessor
     #
     # @return [String] clean and lowercase version of input
     def clean_title title
-      title.gsub(/#{GENDER_FILTER}|#{SYMBOL_FILTER}/,'')
-           .gsub(/\(([a-zA-Z]+)\)/, '\1')
+      title.gsub(SYM_GENDER_REGEX,'')
+           .gsub(WORDS_IN_BRACKETS, '\1')
            .gsub(CODE_TOKEN_FILTER,'')
            .gsub(WHITESPACE,' ')
            .downcase
@@ -66,8 +70,8 @@ module Preprocessor
     # @return [String] clean and lowercase version of input
     def clean_description desc
       desc.gsub(XML_TAG_FILTER,' ')
-          .gsub(/(#{URL_FILTER})|(#{EMAIL_FILTER})|#{GENDER_FILTER}|#{SYMBOL_FILTER}|#{NEW_LINES}/,'')
-          .gsub(/\(([a-zA-Z ]+)\)/, '\1')
+          .gsub(MULTI_CLEANUP,'')
+          .gsub(WORDS_IN_BRACKETS, '\1')
           .gsub(CODE_TOKEN_FILTER,'')
           .gsub(WHITESPACE,' ')
           .downcase
