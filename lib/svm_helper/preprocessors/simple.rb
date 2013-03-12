@@ -6,20 +6,27 @@ module Preprocessor
   # @author Andreas Eger
   #
   class Simple
+    THREAD_COUNT = (ENV['OMP_NUM_THREADS'] || 2).to_i
     # filters most gender stuff
     GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
     # filters most wierd symbols
     SYMBOL_FILTER = %r{/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}
+    # urls and email filter
+    URL_FILTER = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
+    EMAIL_FILTER = /([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})/
+    # filter for new lines
+    NEW_LINES = /(\r\n)|\r|\n/
+    # extract words from brackets
+    WORDS_IN_BRACKETS = /\(([a-zA-Z]+)\)/
     # filters multiple whitesspace
     WHITESPACE = /(\s| )+/
     # filters all kind of XMl/HTML tags
     XML_TAG_FILTER = /<(.*?)>/
     # filter for used job tokens
-    CODE_TOKEN_FILTER = /\[.*\]|\(.*\)|\{.*\}|\d+\w+/
-    # filter for new lines
-    NEW_LINES = /(\r\n)|\r|\n/
+    CODE_TOKEN_FILTER = /\[[^\]]*\]|\([^\)]*\)|\{[^\}]*\}|\S*\d+\w+/
 
     def initialize args={}
+      @parallel = args.fetch(:parallel){false}
     end
 
     def label
@@ -37,7 +44,7 @@ module Preprocessor
     # @return [Array<PreprocessedData>] list of processed job data - or singe job data
     def process jobs, classification=:function
       if jobs.respond_to? :map
-        jobs.map{|job| process_job job, classification }
+        process_jobs jobs, classification
       else
         process_job jobs, classification
       end
@@ -51,7 +58,7 @@ module Preprocessor
     def clean_title title
       title.gsub(GENDER_FILTER,'').
             gsub(SYMBOL_FILTER,'').
-            gsub(/\(([a-zA-Z]+)\)/, '\1').
+            gsub(WORDS_IN_BRACKETS, '\1').
             gsub(CODE_TOKEN_FILTER,'').
             gsub(WHITESPACE,' ').
             downcase.
@@ -64,17 +71,29 @@ module Preprocessor
     # @return [String] clean and lowercase version of input
     def clean_description desc
       desc.gsub(XML_TAG_FILTER,' ')
+          .gsub(EMAIL_FILTER,'')
+          .gsub(URL_FILTER,'')
           .gsub(GENDER_FILTER,'')
           .gsub(NEW_LINES,'')
           .gsub(SYMBOL_FILTER,' ')
           .gsub(WHITESPACE,' ')
-          .gsub(/\(([a-zA-Z ]+)\)/, '\1')
+          .gsub(WORDS_IN_BRACKETS, '\1')
           .gsub(CODE_TOKEN_FILTER,'')
           .downcase
           .strip
     end
 
     private
+    def process_jobs jobs, classification
+      if @parallel && RUBY_PLATFORM == 'java'
+        Parallel.map(jobs, in_threads: THREAD_COUNT ) {|job| process_job job, classification }
+      elsif @parallel
+        Parallel.map(jobs, in_processes: THREAD_COUNT ) {|job| process_job job, classification }
+      else
+        jobs.map {|job| process_job job, classification }
+      end
+    end
+
     def process_job job, classification
       PreprocessedData.new(
         data: [ clean_title(job.title), clean_description(job.description) ],

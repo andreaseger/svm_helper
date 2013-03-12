@@ -105,5 +105,17 @@ describe Selector::Simple do
       simple.expects(:make_vector).twice
       simple.generate_vectors(data)
     end
+    context "parallel" do
+      let(:parallel) { Selector::Simple.new(parallel: true) }
+      before(:each) do
+        simple.stubs(:global_dictionary).returns(dictionary)
+        parallel.stubs(:global_dictionary).returns(dictionary)
+      end
+      it "should be equal results in processes" do
+        single = simple.generate_vectors(data)
+        p_data = parallel.generate_vectors(data)
+        single.each.with_index {|e,i| e.data.should == p_data[i].data}
+      end
+    end
   end
 end

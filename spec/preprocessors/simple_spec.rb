@@ -104,7 +104,7 @@ describe Preprocessor::Simple do
     end
     it "should remove gender tokens" do
       desc = simple.clean_description(jobs[3].description)
-      desc.should_not match(%r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)|mw})
+      desc.should_not match(%r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)})
     end
     it "should remove job code token" do
       desc = simple.clean_description(jobs[4].description)
@@ -113,6 +113,26 @@ describe Preprocessor::Simple do
     it "should be downcased" do
       desc = simple.clean_description(jobs[2].description)
       desc.should_not match(/[^a-z öäü]/)
+    end
+  end
+  context "parallel" do
+      let(:parallel) { Preprocessor::Simple.new(parallel: true) }
+
+    let(:jobs) {
+      [ FactoryGirl.build(:job_description_w_tags),
+        FactoryGirl.build(:job_description_w_adress),
+        FactoryGirl.build(:job_description_w_special),
+        FactoryGirl.build(:job_description_w_code_token),
+        FactoryGirl.build(:job_description_w_gender) ]
+    }
+    before(:each) do
+      jobs.each{|e| e.stubs(:classification_id)}
+      jobs.each{|e| e.stubs(:label)}
+    end
+    it "should be the same parallelized" do
+      single = simple.process(jobs, :function)
+      p_data = parallel.process(jobs, :function)
+      single.each.with_index { |e,i| e.data.should == p_data[i].data }
     end
   end
 end

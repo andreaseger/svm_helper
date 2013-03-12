@@ -5,6 +5,7 @@ module Selector
   # @author Andreas Eger
   #
   class Simple
+    THREAD_COUNT = (ENV['OMP_NUM_THREADS'] || 2).to_i
     # stopword file
     #TODO use File.expand_path
     STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
@@ -28,6 +29,7 @@ module Selector
     def initialize args={}
       @global_dictionary = args.fetch(:global_dictionary) {[]}
       @language = args.fetch(:language){'en'}
+      @parallel = args.fetch(:parallel){false}
     end
 
     def label
@@ -45,10 +47,10 @@ module Selector
       words_per_data = extract_words data_set
       generate_global_dictionary words_per_data, dictionary_size
 
-      words_per_data.map.with_index{|words,index|
+      make_vectors(words_per_data) do |words,index|
         word_set = words.uniq
         make_vector word_set, data_set[index], classification
-      }
+      end
     end
 
     #
@@ -136,6 +138,16 @@ module Selector
           industry: data.labels[:industry] ? 1 : 0,
           career_level: data.labels[:career_level] ? 1 : 0 }
       ).tap{|e| e.send("#{classification}!")}
+    end
+
+    def make_vectors data, &block
+      if @parallel && RUBY_PLATFORM == 'java'
+        Parallel.map_with_index(data, in_threads: THREAD_COUNT ){|e,i| yield e,i }
+      elsif @parallel
+        Parallel.map_with_index(data, in_processes: THREAD_COUNT ){|e,i| yield e,i }
+      else
+        data.map.with_index {|e,i| yield e,i }
+      end
     end
 
     #
