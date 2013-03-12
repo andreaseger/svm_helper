@@ -40,9 +40,18 @@ module Preprocessor
     #   @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     #
     # @return [Array<PreprocessedData>] list of processed job data - or singe job data
-    def process jobs, classification=:function
+    def process jobs, classification=:function, options={}
+      parallel = options.fetch(:parallel) {false}
+      parallel = :threads if RUBY_PLATFORM == 'java' && parallel == :processes
       if jobs.respond_to? :map
-        jobs.map{|job| process_job job, classification }
+        case parallel
+        when :processes
+          Parallel.map(jobs) {|job| process_job job, classification }
+        when :threads
+          Parallel.map(jobs, in_threads: (ENV['OMP_NUM_THREADS'] || 2) ) {|job| process_job job, classification }
+        else
+          jobs.map {|job| process_job job, classification }
+        end
       else
         process_job jobs, classification
       end
