@@ -10,18 +10,19 @@ module Preprocessor
     GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
     # filters most wierd symbols
     SYMBOL_FILTER = %r{/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}
+    # urls and email filter
+    URL_FILTER = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
+    EMAIL_FILTER = /([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})/
+    # filter for new lines
+    NEW_LINES = /(\r\n)|\r|\n/
+    # extract words from brackets
+    WORDS_IN_BRACKETS = /\(([a-zA-Z]+)\)/
     # filters multiple whitesspace
     WHITESPACE = /(\s| )+/
     # filters all kind of XMl/HTML tags
     XML_TAG_FILTER = /<(.*?)>/
     # filter for used job tokens
     CODE_TOKEN_FILTER = /\[[^\]]*\]|\([^\)]*\)|\{[^\}]*\}|\S*\d+\w+/
-    # filter for new lines
-    NEW_LINES = /(\r\n)|\r|\n/
-
-    URL_FILTER = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
-    EMAIL_FILTER = /([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})/
-
 
     def initialize args={}
     end
@@ -55,7 +56,7 @@ module Preprocessor
     def clean_title title
       title.gsub(GENDER_FILTER,'').
             gsub(SYMBOL_FILTER,'').
-            gsub(/\(([a-zA-Z]+)\)/, '\1').
+            gsub(WORDS_IN_BRACKETS, '\1').
             gsub(CODE_TOKEN_FILTER,'').
             gsub(WHITESPACE,' ').
             downcase.
@@ -74,7 +75,7 @@ module Preprocessor
           .gsub(NEW_LINES,'')
           .gsub(SYMBOL_FILTER,' ')
           .gsub(WHITESPACE,' ')
-          .gsub(/\(([a-zA-Z ]+)\)/, '\1')
+          .gsub(WORDS_IN_BRACKETS, '\1')
           .gsub(CODE_TOKEN_FILTER,'')
           .downcase
           .strip
