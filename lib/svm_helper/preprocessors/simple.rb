@@ -6,10 +6,8 @@ module Preprocessor
   # @author Andreas Eger
   #
   class Simple
-    # filters most gender stuff
-    GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
-    # filters most wierd symbols
-    SYMBOL_FILTER = %r{/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}
+    # filters most gender stuff and wierd symbols
+    GEN_SYM_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)|/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}
     # urls and email filter
     URL_FILTER = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
     EMAIL_FILTER = /([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})/
@@ -54,8 +52,7 @@ module Preprocessor
     #
     # @return [String] clean and lowercase version of input
     def clean_title title
-      title.gsub(GENDER_FILTER,'').
-            gsub(SYMBOL_FILTER,'').
+      title.gsub(GEN_SYM_FILTER,'').
             gsub(WORDS_IN_BRACKETS, '\1').
             gsub(CODE_TOKEN_FILTER,'').
             gsub(WHITESPACE,' ').
@@ -71,9 +68,8 @@ module Preprocessor
       desc.gsub(XML_TAG_FILTER,' ')
           .gsub(EMAIL_FILTER,'')
           .gsub(URL_FILTER,'')
-          .gsub(GENDER_FILTER,'')
+          .gsub(GEN_SYM_FILTER,'')
           .gsub(NEW_LINES,'')
-          .gsub(SYMBOL_FILTER,' ')
           .gsub(WHITESPACE,' ')
           .gsub(WORDS_IN_BRACKETS, '\1')
           .gsub(CODE_TOKEN_FILTER,'')
