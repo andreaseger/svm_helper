@@ -105,5 +105,24 @@ describe Selector::Simple do
       simple.expects(:make_vector).twice
       simple.generate_vectors(data)
     end
+    context "parallel" do
+      let(:in_threads) { Selector::Simple.new(parallel: :threads) }
+      let(:in_processes) { Selector::Simple.new(parallel: :processes) }
+      before(:each) do
+        simple.stubs(:global_dictionary).returns(dictionary)
+        in_processes.stubs(:global_dictionary).returns(dictionary)
+        in_threads.stubs(:global_dictionary).returns(dictionary)
+      end
+      it "should be equal results in processes" do
+        single = simple.generate_vectors(data)
+        processes = in_processes.generate_vectors(data)
+        single.each.with_index {|e,i| e.data.should == processes[i].data}
+      end
+      it "should be equal results in threads" do
+        single = simple.generate_vectors(data)
+        threads = in_threads.generate_vectors(data)
+        single.each.with_index {|e,i| e.data.should == threads[i].data}
+      end
+    end
   end
 end

@@ -28,6 +28,8 @@ module Selector
     def initialize args={}
       @global_dictionary = args.fetch(:global_dictionary) {[]}
       @language = args.fetch(:language){'en'}
+      @parallel = args.fetch(:parallel){false}
+      @parallel = :threads if RUBY_PLATFORM == 'java' && @parallel == :processes
     end
 
     def label
@@ -45,10 +47,10 @@ module Selector
       words_per_data = extract_words data_set
       generate_global_dictionary words_per_data, dictionary_size
 
-      words_per_data.map.with_index{|words,index|
+      make_vectors(words_per_data) do |words,index|
         word_set = words.uniq
         make_vector word_set, data_set[index], classification
-      }
+      end
     end
 
     #
@@ -136,6 +138,17 @@ module Selector
           industry: data.labels[:industry] ? 1 : 0,
           career_level: data.labels[:career_level] ? 1 : 0 }
       ).tap{|e| e.send("#{classification}!")}
+    end
+
+    def make_vectors data, &block
+      case @parallel
+      when :processes
+        Parallel.map_with_index(data){|e,i| yield e,i }
+      when :threads
+        Parallel.map_with_index(data, in_threads: (ENV['OMP_NUM_THREADS'] || 2) ){|e,i| yield e,i }
+      else
+        data.map.with_index {|e,i| yield e,i }
+      end
     end
 
     #
