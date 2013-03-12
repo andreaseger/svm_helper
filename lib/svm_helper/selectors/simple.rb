@@ -5,6 +5,7 @@ module Selector
   # @author Andreas Eger
   #
   class Simple
+    THREAD_COUNT = (ENV['OMP_NUM_THREADS'] || 2).to_i
     # stopword file
     #TODO use File.expand_path
     STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
@@ -29,7 +30,6 @@ module Selector
       @global_dictionary = args.fetch(:global_dictionary) {[]}
       @language = args.fetch(:language){'en'}
       @parallel = args.fetch(:parallel){false}
-      @parallel = :threads if RUBY_PLATFORM == 'java' && @parallel == :processes
     end
 
     def label
@@ -141,11 +141,10 @@ module Selector
     end
 
     def make_vectors data, &block
-      case @parallel
-      when :processes
-        Parallel.map_with_index(data){|e,i| yield e,i }
-      when :threads
-        Parallel.map_with_index(data, in_threads: (ENV['OMP_NUM_THREADS'] || 2) ){|e,i| yield e,i }
+      if @parallel && RUBY_PLATFORM == 'java'
+        Parallel.map_with_index(data, in_threads: THREAD_COUNT ){|e,i| yield e,i }
+      elsif @parallel
+        Parallel.map_with_index(data, in_processes: THREAD_COUNT ){|e,i| yield e,i }
       else
         data.map.with_index {|e,i| yield e,i }
       end

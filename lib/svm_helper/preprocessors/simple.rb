@@ -6,6 +6,7 @@ module Preprocessor
   # @author Andreas Eger
   #
   class Simple
+    THREAD_COUNT = (ENV['OMP_NUM_THREADS'] || 2).to_i
     # filters most gender stuff
     GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
     # filters most wierd symbols
@@ -25,6 +26,7 @@ module Preprocessor
     CODE_TOKEN_FILTER = /\[[^\]]*\]|\([^\)]*\)|\{[^\}]*\}|\S*\d+\w+/
 
     def initialize args={}
+      @parallel = args.fetch(:parallel){false}
     end
 
     def label
@@ -40,18 +42,9 @@ module Preprocessor
     #   @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     #
     # @return [Array<PreprocessedData>] list of processed job data - or singe job data
-    def process jobs, classification=:function, options={}
-      parallel = options.fetch(:parallel) {false}
-      parallel = :threads if RUBY_PLATFORM == 'java' && parallel == :processes
+    def process jobs, classification=:function
       if jobs.respond_to? :map
-        case parallel
-        when :processes
-          Parallel.map(jobs) {|job| process_job job, classification }
-        when :threads
-          Parallel.map(jobs, in_threads: (ENV['OMP_NUM_THREADS'] || 2) ) {|job| process_job job, classification }
-        else
-          jobs.map {|job| process_job job, classification }
-        end
+        process_jobs jobs, classification
       else
         process_job jobs, classification
       end
@@ -91,6 +84,16 @@ module Preprocessor
     end
 
     private
+    def process_jobs jobs, classification
+      if @parallel && RUBY_PLATFORM == 'java'
+        Parallel.map(jobs, in_threads: THREAD_COUNT ) {|job| process_job job, classification }
+      elsif @parallel
+        Parallel.map(jobs, in_processes: THREAD_COUNT ) {|job| process_job job, classification }
+      else
+        jobs.map {|job| process_job job, classification }
+      end
+    end
+
     def process_job job, classification
       PreprocessedData.new(
         data: [ clean_title(job.title), clean_description(job.description) ],

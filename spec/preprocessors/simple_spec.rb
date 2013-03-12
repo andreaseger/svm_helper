@@ -116,6 +116,8 @@ describe Preprocessor::Simple do
     end
   end
   context "parallel" do
+      let(:parallel) { Preprocessor::Simple.new(parallel: true) }
+
     let(:jobs) {
       [ FactoryGirl.build(:job_description_w_tags),
         FactoryGirl.build(:job_description_w_adress),
@@ -127,15 +129,10 @@ describe Preprocessor::Simple do
       jobs.each{|e| e.stubs(:classification_id)}
       jobs.each{|e| e.stubs(:label)}
     end
-    it "should be the same in parallel processes" do
+    it "should be the same parallelized" do
       single = simple.process(jobs, :function)
-      in_processes = simple.process(jobs, :function, parallel: :processes)
-      single.each.with_index { |e,i| e.data.should == in_processes[i].data }
-    end
-    it "should be the same in parallel threads" do
-      single = simple.process(jobs, :function)
-      in_threads = simple.process(jobs, :function, parallel: :threads)
-      single.each.with_index { |e,i| e.data.should == in_threads[i].data }
+      p_data = parallel.process(jobs, :function)
+      single.each.with_index { |e,i| e.data.should == p_data[i].data }
     end
   end
 end
