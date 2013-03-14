@@ -11,31 +11,18 @@ describe Preprocessor::Simple do
   context do
     before(:each) do
       @jobs = FactoryGirl.build_list :job, 3
-      @jobs.each{|e| e.stubs(:classification_id)}
-      @jobs.each{|e| e.stubs(:label)}
     end
     it "should work with jobs with quality check" do
       -> {simple.process(@jobs) }.should_not raise_error
     end
-    # it "should set labels to true if quality check exists and no wrong_ label set" do
-    #   simple.process(@jobs).each{|e| e.career_level!; e.label.should be_true}
-    # end
-    it "should set labels to false if quality check exists and wrong_ label is set" do
-      simple.process(@jobs).each{|e| e.function!; e.label.should be_false}
+    it "should set labels to true if quality check exists and label was true" do
+      @jobs.map!{|e| e[:label] = true;e }
+      simple.process(@jobs).each{|e| e.label.should be_true}
     end
-  end
-
-  it "should work with jobs without quality check" do
-    jobs = FactoryGirl.build_list :job_without_job_check, 3
-    jobs.each{|e| e.stubs(:classification_id)}
-    jobs.each{|e| e.stubs(:label)}
-    -> {simple.process(jobs) }.should_not raise_error
-  end
-  it "should set labels to false if no quality check" do
-    jobs = FactoryGirl.build_list :job_without_job_check, 3
-    jobs.each{|e| e.stubs(:classification_id)}
-    jobs.each{|e| e.stubs(:label)}
-    simple.process(jobs).each{|e| e.career_level!; e.label.should be_false}
+    it "should set labels to false if quality check exists and label false" do
+      @jobs.map!{|e| e[:label] = false;e }
+      simple.process(@jobs).each{|e| e.label.should be_false}
+    end
   end
 
   context "processing" do
@@ -43,8 +30,6 @@ describe Preprocessor::Simple do
     before(:each) do
       simple.stubs(:clean_title)
       simple.stubs(:clean_description)
-      jobs.each{|e| e.stubs(:classification_id)}
-      jobs.each{|e| e.stubs(:label)}
     end
     it "should call clean_title on each job" do
       simple.expects(:clean_title).times(3)
@@ -59,7 +44,7 @@ describe Preprocessor::Simple do
   context "#clean_title" do
     it "should be downcased" do
       job = FactoryGirl.build(:job_title_downcasing)
-      simple.clean_title(job.title).should eq(job.clean_title)
+      simple.clean_title(job[:title]).should eq(job[:clean_title])
     end
     [ FactoryGirl.build(:job_title_w_gender),
       FactoryGirl.build(:job_title_w_gender_brackets),
@@ -77,8 +62,8 @@ describe Preprocessor::Simple do
       FactoryGirl.build(:job_title_var_0),
       FactoryGirl.build(:job_title_w_special),
       FactoryGirl.build(:job_title_w_percent)].each do |job|
-      it "should cleanup '#{job.title}'" do
-        simple.clean_title(job.title).should eq(job.clean_title)
+      it "should cleanup '#{job[:title]}'" do
+        simple.clean_title(job[:title]).should eq(job[:clean_title])
       end
     end
   end
@@ -91,27 +76,27 @@ describe Preprocessor::Simple do
         FactoryGirl.build(:job_description_w_gender) ]
     }
     it "should remove html/xml tags" do
-      desc = simple.clean_description(jobs[0].description)
+      desc = simple.clean_description(jobs[0][:description])
       desc.should_not match(/<(.*?)>/)
     end
     it "should remove new lines" do
-      desc = simple.clean_description(jobs[0].description)
+      desc = simple.clean_description(jobs[0][:description])
       desc.should_not match(/\r\n|\n|\r/)
     end
     it "should remove all special characters" do
-      desc = simple.clean_description(jobs[2].description)
+      desc = simple.clean_description(jobs[2][:description])
       desc.should_not match(/[^a-z öäü]/i)
     end
     it "should remove gender tokens" do
-      desc = simple.clean_description(jobs[3].description)
+      desc = simple.clean_description(jobs[3][:description])
       desc.should_not match(%r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)})
     end
     it "should remove job code token" do
-      desc = simple.clean_description(jobs[4].description)
+      desc = simple.clean_description(jobs[4][:description])
       desc.should_not match(/\[.*\]|\(.*\)|\{.*\}|\d+\w+/)
     end
     it "should be downcased" do
-      desc = simple.clean_description(jobs[2].description)
+      desc = simple.clean_description(jobs[2][:description])
       desc.should_not match(/[^a-z öäü]/)
     end
   end
@@ -125,13 +110,9 @@ describe Preprocessor::Simple do
         FactoryGirl.build(:job_description_w_code_token),
         FactoryGirl.build(:job_description_w_gender) ]
     }
-    before(:each) do
-      jobs.each{|e| e.stubs(:classification_id)}
-      jobs.each{|e| e.stubs(:label)}
-    end
     it "should be the same parallelized" do
-      single = simple.process(jobs, :function)
-      p_data = parallel.process(jobs, :function)
+      single = simple.process(jobs)
+      p_data = parallel.process(jobs)
       single.each.with_index { |e,i| e.data.should == p_data[i].data }
     end
   end

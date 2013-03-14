@@ -5,13 +5,10 @@ require_relative 'interface_helper'
 # @author Andreas Eger
 class FeatureVector < InterfaceHelper
   attribute :word_data
-  attribute :classification_arrays
-  attribute :labels
+  attribute :classification
+  attribute :label
 
-  def label
-    labels[classification]
-  end
   def data
-    word_data + classification_arrays[classification]
+    word_data + classification
   end
 end

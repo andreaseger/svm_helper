@@ -5,13 +5,6 @@ require_relative 'interface_helper'
 # @author Andreas Eger
 class PreprocessedData < InterfaceHelper
   attribute :data
-  attribute :ids
-  attribute :labels
-
-  def id
-    ids[classification]
-  end
-  def label
-    labels[classification]
-  end
+  attribute :id
+  attribute :label
 end

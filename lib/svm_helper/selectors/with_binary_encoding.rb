@@ -12,7 +12,7 @@ module Selector
           industry: 16,       # max id 65535, currently 14370
           career_level: 4 }   # max id 15, currently 8
 
-    def initialize args={}
+    def initialize *args
       super
     end
 
@@ -26,9 +26,8 @@ module Selector
     # @param  ids [Hash] hash with classification ids
     #
     # @return [Array<Integer>] binary encoded classification id
-    def classification_array(ids, classification)
-      id = ids[classification]
-      number_to_binary_array(id, CLASSIFICATIONS_SIZE[classification])
+    def classification_array(id)
+      number_to_binary_array(id, CLASSIFICATIONS_SIZE[@classification])
     end
 
     def number_to_binary_array(number, size=8)

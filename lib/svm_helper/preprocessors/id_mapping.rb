@@ -11,8 +11,9 @@ module Preprocessor
     #
     # @param  args [Hash] options hash
     # @option args [Hash] :industry_map mapping for the tree like industry ids to continuous ones
-    def initialize args={}
-      @id_map = args.fetch(:id_map){ Hash[Pjpp::Industry.select(:id).all.map(&:id).sort.map.with_index{|e,i| [e,i]}] }
+    def initialize id_map, args={}
+      super(args)
+      @id_map = id_map
     end
 
     def map_id(id)

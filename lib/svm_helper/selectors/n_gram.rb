@@ -8,7 +8,7 @@ module Selector
   class NGram < Selector::Simple
     attr_reader :gram_size
 
-    def initialize args={}
+    def initialize classification, args={}
       super
       @gram_size = args.fetch(:gram_size) { 2 }
     end

@@ -30,7 +30,6 @@ class InterfaceHelper
     params.each do |key, value|
       send("#{key}=", value)
     end
-    @_attributes[:classification] ||= :function
   end
 
   #
@@ -40,18 +39,5 @@ class InterfaceHelper
   # @return [Boolean] result after comparing each attribute
   def == anOther
     @_attributes.keys.map{ |sym| self.send(sym) == anOther.send(sym)}.reduce(true){|a,e| a && e }
-  end
-
-  def industry!
-    @_attributes[:classification] = :industry
-  end
-  def function!
-    @_attributes[:classification] = :function
-  end
-  def career_level!
-    @_attributes[:classification] = :career_level
-  end
-  def classification
-    @_attributes[:classification]
   end
 end

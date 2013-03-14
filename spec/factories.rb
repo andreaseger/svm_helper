@@ -16,16 +16,10 @@ FactoryGirl.define do
     initialize_with { attributes }
   end
 
-  factory :job_without_job_check, class: OpenStruct do
-    title "Meh"
-    description "Foo Bar"
-    summary "Really lot of work to do"
-    original_industry_id 1423
-  end
 
   factory :data, class: PreprocessedData do
     data ["haus fooo garten baaz pferd fooo"]
-    id 3
+    id 7
     label true
   end
   factory :data_w_short_words, parent: :data do

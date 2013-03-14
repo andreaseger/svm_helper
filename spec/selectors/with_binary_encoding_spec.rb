@@ -2,11 +2,11 @@ require "spec_helper"
 
 describe Selector::WithBinaryEncoding do
   it_behaves_like 'a selector'
-  let(:simple) { Selector::WithBinaryEncoding.new }
+  let(:simple) { Selector::WithBinaryEncoding.new(:career_level) }
 
   let(:dictionary) { %w(auto pferd haus hase garten) }
   let(:data) { FactoryGirl.build(:data) }
-  let(:vector) { simple.generate_vector(data).tap{|e| e.career_level! } }
+  let(:vector) { simple.generate_vector(data) }
 
   before(:each) do
     simple.stubs(:global_dictionary).returns(dictionary)
@@ -32,7 +32,7 @@ describe Selector::WithBinaryEncoding do
   end
   context "custom dictionary" do
     it "should accept a custom dictionary" do
-      vector = simple.generate_vector(data, :career_level, %w(pferd flasche glas))
+      vector = simple.generate_vector(data, %w(pferd flasche glas))
       vector.data.should eq([[1,0,0],[0,1,1,1]].flatten)
     end
   end

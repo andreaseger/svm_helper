@@ -2,8 +2,8 @@ require "spec_helper"
 
 describe Selector::Simple do
   it_behaves_like 'a selector'
-  
-  let(:simple) { Selector::Simple.new }
+
+  let(:simple) { Selector::Simple.new(:function) }
   it "should have select_feature_vector implemented" do
     expect { simple.generate_vectors([]) }.to_not raise_error
   end
@@ -53,7 +53,8 @@ describe Selector::Simple do
   context "#generate_vector" do
     let(:dictionary) { %w(auto pferd haus hase garten) }
     let(:data) { FactoryGirl.build(:data) }
-    let(:vector) { simple.generate_vector(data).tap{|e| e.career_level! } }
+    let(:simple) { Selector::Simple.new(:career_level) }
+    let(:vector) { simple.generate_vector(data) }
 
     before(:each) do
       simple.stubs(:global_dictionary).returns(dictionary)
@@ -79,7 +80,7 @@ describe Selector::Simple do
     end
     context "custom dictionary" do
       it "should accept a custom dictionary" do
-        vector = simple.generate_vector(data, :career_level, %w(pferd flasche glas))
+        vector = simple.generate_vector(data, %w(pferd flasche glas))
         vector.data.should eq([[1,0,0],[0,0,0,0,0,0,1,0]].flatten)
       end
     end
@@ -106,7 +107,7 @@ describe Selector::Simple do
       simple.generate_vectors(data)
     end
     context "parallel" do
-      let(:parallel) { Selector::Simple.new(parallel: true) }
+      let(:parallel) { Selector::Simple.new(:function, parallel: true) }
       before(:each) do
         simple.stubs(:global_dictionary).returns(dictionary)
         parallel.stubs(:global_dictionary).returns(dictionary)
