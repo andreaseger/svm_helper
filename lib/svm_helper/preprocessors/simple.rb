@@ -35,20 +35,25 @@ module Preprocessor
     #
     # cleans provided jobs
     # @overload process(jobs, classification)
-    #   @param  jobs [Job] single Job
+    #   @param  jobs [Hash] single Job
+    #   @option title
+    #   @option description
+    #   @option id
+    #   @option label
     #   @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @overload process(jobs, classification)
     #   @param  jobs [Array<Job>] list of Jobs
     #   @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     #
     # @return [Array<PreprocessedData>] list of processed job data - or singe job data
-    def process jobs, classification=:function
+    def process jobs
       if jobs.respond_to? :map
         process_jobs jobs, classification
       else
-        process_job jobs, classification
+        process_job jobs
       end
     end
+
 
     #
     # converts string into a cleaner version
@@ -94,18 +99,12 @@ module Preprocessor
       end
     end
 
-    def process_job job, classification
+    def process_job job
       PreprocessedData.new(
-        data: [ clean_title(job.title), clean_description(job.description) ],
-        ids: {
-          industry: job.classification_id(:industry),
-          function: job.classification_id(:function),
-          career_level: job.classification_id(:career_level) },
-        labels: {
-          industry: job.label(:industry),
-          function: job.label(:function),
-          career_level: job.label(:career_level) }
-      ).tap{|e| e.send("#{classification}!")}
+        data: [clean_title(job[:title]), clean_description(job[:description])],
+        id: job[:id],
+        label: job[:label]
+      )
     end
   end
 end

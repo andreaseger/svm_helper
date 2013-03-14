@@ -7,11 +7,13 @@ FactoryGirl.define do
     wrong_function_id 4
     wrong_career_level nil
   end
-  factory :job, class: OpenStruct do
+  factory :job, class: Hash do
     title "Meh"
     description "Foo Bar"
-    summary "Really lot of work to do"
-    qc_job_check
+    id 4
+    label true
+
+    initialize_with { attributes }
   end
 
   factory :job_without_job_check, class: OpenStruct do
@@ -23,8 +25,8 @@ FactoryGirl.define do
 
   factory :data, class: PreprocessedData do
     data ["haus fooo garten baaz pferd fooo"]
-    ids {{function:  3, industry: 43, career_level: 7}}
-    labels {{function:  true, industry: false, career_level: true}}
+    id 3
+    label true
   end
   factory :data_w_short_words, parent: :data do
     data ["auto foo pferd bz gooo fooo 2"]
