@@ -131,7 +131,7 @@ module Selector
                      words.include?(dic_word) ? 1 : 0
                    },
         classification: classification_array(data.id),
-        label: data.label
+        label: data.label ? 1 : 0
       )
     end
 
