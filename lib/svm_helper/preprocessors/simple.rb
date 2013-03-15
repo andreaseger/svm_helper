@@ -35,20 +35,25 @@ module Preprocessor
     #
     # cleans provided jobs
     # @overload process(jobs, classification)
-    #   @param  jobs [Job] single Job
+    #   @param  jobs [Hash] single Job
+    #   @option title
+    #   @option description
+    #   @option id
+    #   @option label
     #   @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @overload process(jobs, classification)
-    #   @param  jobs [Array<Job>] list of Jobs
+    #   @param  jobs [Array<Hash>] list of Jobs
     #   @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     #
     # @return [Array<PreprocessedData>] list of processed job data - or singe job data
-    def process jobs, classification=:function
-      if jobs.respond_to? :map
-        process_jobs jobs, classification
+    def process jobs
+      if jobs.is_a? Array
+        process_jobs jobs
       else
-        process_job jobs, classification
+        process_job jobs
       end
     end
+
 
     #
     # converts string into a cleaner version
@@ -84,28 +89,22 @@ module Preprocessor
     end
 
     private
-    def process_jobs jobs, classification
+    def process_jobs jobs
       if @parallel && RUBY_PLATFORM == 'java'
-        Parallel.map(jobs, in_threads: THREAD_COUNT ) {|job| process_job job, classification }
+        Parallel.map(jobs, in_threads: THREAD_COUNT ) {|job| process_job job }
       elsif @parallel
-        Parallel.map(jobs, in_processes: THREAD_COUNT ) {|job| process_job job, classification }
+        Parallel.map(jobs, in_processes: THREAD_COUNT ) {|job| process_job job }
       else
-        jobs.map {|job| process_job job, classification }
+        jobs.map {|job| process_job job }
       end
     end
 
-    def process_job job, classification
+    def process_job job
       PreprocessedData.new(
-        data: [ clean_title(job.title), clean_description(job.description) ],
-        ids: {
-          industry: job.classification_id(:industry),
-          function: job.classification_id(:function),
-          career_level: job.classification_id(:career_level) },
-        labels: {
-          industry: job.label(:industry),
-          function: job.label(:function),
-          career_level: job.label(:career_level) }
-      ).tap{|e| e.send("#{classification}!")}
+        data: [clean_title(job[:title]), clean_description(job[:description])],
+        id: job[:id],
+        label: job[:label]
+      )
     end
   end
 end
