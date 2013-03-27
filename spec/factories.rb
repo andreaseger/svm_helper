@@ -24,6 +24,7 @@ FactoryGirl.define do
   end
   factory :data_w_short_words, parent: :data do
     data ["auto fo pferd bz gooo fooo 2"]
+    label false
   end
   factory :data_w_multiple_sections, parent: :data do
     data ["meeh fo auto","bz baaz fooo 2"]

@@ -38,11 +38,10 @@ module Selector
       return unless global_dictionary.empty?
 
       label_counts = [0,0]
-
       features = all_words.reduce(Hash.new { |h, k| h[k] = [0,0] }) do |accumulator, bag|
         label = bag.label ? 1 : 0
         label_counts[label] += 1
-        bag.words.each do |word|
+        bag.features.each do |word|
           unless accumulator.has_key?(word)
             accumulator[word] = [0,0]
           end
@@ -57,7 +56,6 @@ module Selector
                 bns = cdf_inverse(true_prositive_rate) - cdf_inverse(false_prositive_rate)
                 [word, bns.abs]
               end
-
       @global_dictionary = words.compact
                                 .sort_by{|e| e[1]}
                                 .last(size)

@@ -18,4 +18,18 @@ describe Selector::Forman do
       words.should have(7).things
     end
   end
+  context "#generate_global_dictionary" do
+    let(:data) { [FactoryGirl.build_list(:data,1),
+                  FactoryGirl.build_list(:data_w_short_words,2),
+                  FactoryGirl.build_list(:data_w_multiple_sections,3)].flatten }
+    let(:words_per_data) { forman.extract_words(data,true) }
+    it "should return a list of n words" do
+      forman.generate_global_dictionary(words_per_data,2)
+      forman.global_dictionary.should have(2).things
+    end
+    it "should return a list of the n most used words in the data array" do
+      forman.generate_global_dictionary(words_per_data,3)
+      forman.global_dictionary.should eq(%w(fooo auto pferd))
+    end
+  end
 end
