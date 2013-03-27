@@ -6,7 +6,7 @@ module Preprocessor
   # @author Andreas Eger
   #
   class Simple
-    THREAD_COUNT = (ENV['OMP_NUM_THREADS'] || 2).to_i
+    include ::ParallelHelper
     # filters most gender stuff
     GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
     # filters most wierd symbols
@@ -48,7 +48,7 @@ module Preprocessor
     # @return [Array<PreprocessedData>] list of processed job data - or singe job data
     def process jobs
       if jobs.is_a? Array
-        process_jobs jobs
+        p_map(jobs) {|job| process_job job }
       else
         process_job jobs
       end
@@ -89,15 +89,6 @@ module Preprocessor
     end
 
     private
-    def process_jobs jobs
-      if @parallel && RUBY_PLATFORM == 'java'
-        Parallel.map(jobs, in_threads: THREAD_COUNT ) {|job| process_job job }
-      elsif @parallel
-        Parallel.map(jobs, in_processes: THREAD_COUNT ) {|job| process_job job }
-      else
-        jobs.map {|job| process_job job }
-      end
-    end
 
     def process_job job
       PreprocessedData.new(
