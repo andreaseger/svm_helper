@@ -21,7 +21,7 @@ module Selector
       words_and_label_per_data = extract_words data_set, true
       generate_global_dictionary words_and_label_per_data, dictionary_size
 
-      words_per_data = words_and_label_per_data.map(&:words)
+      words_per_data = words_and_label_per_data.map(&:features)
       p_map_with_index(words_per_data) do |words,index|
         word_set = words.uniq
         make_vector word_set, data_set[index]
