@@ -96,7 +96,7 @@ module Selector
     private
 
     SQR2 = Math.sqrt(2)
-    SQR2PI = Math.sqrt(2.0*Math.PI)
+    SQR2PI = Math.sqrt(2.0*Math::PI)
     # standard normal cumulative distribution function
     def cdf(z)
       0.5 * (1.0 + Math.erf( z.quo(SQR2) ) )

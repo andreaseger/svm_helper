@@ -13,9 +13,7 @@ shared_examples_for 'a selector' do
       [0,1].should include(e)
     end
   end
-  it "should be able to process multiple data entries at once" do
-    selector.generate_vectors([data]).each do |e|
-      e.should == selector.generate_vector(data)
-    end
+  it "should respond to generate_vectors" do
+    selector.should respond_to(:generate_vectors)
   end
 end

@@ -109,6 +109,7 @@ describe Selector::Simple do
     context "parallel" do
       let(:parallel) { Selector::Simple.new(:function, parallel: true) }
       before(:each) do
+        require 'parallel'
         simple.stubs(:global_dictionary).returns(dictionary)
         parallel.stubs(:global_dictionary).returns(dictionary)
       end
