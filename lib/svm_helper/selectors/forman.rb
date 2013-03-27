@@ -22,7 +22,7 @@ module Selector
       generate_global_dictionary words_and_label_per_data, dictionary_size
 
       words_per_data = words_and_label_per_data.map(&:words)
-      make_vectors(words_per_data) do |words,index|
+      p_map_with_index(words_per_data) do |words,index|
         word_set = words.uniq
         make_vector word_set, data_set[index]
       end
@@ -50,15 +50,18 @@ module Selector
         end
         accumulator
       end
-      words = features.map { |word,counts|
+      words = p_map(features) do |word, counts|
                 next if counts.any? { |e| e==0 } # skip words only appearing in one class
                 false_prositive_rate = counts[0].quo(label_counts[0])
                 true_prositive_rate = counts[1].quo(label_counts[1])
                 bns = cdf_inverse(true_prositive_rate) - cdf_inverse(false_prositive_rate)
                 [word, bns.abs]
-              }.compact
+              end
 
-      @global_dictionary = words.sort_by{|e| e[1]}.last(size).map{|e| e[0] }
+      @global_dictionary = words.compact
+                                .sort_by{|e| e[1]}
+                                .last(size)
+                                .map{|e| e[0] }
     end
 
     #

@@ -24,7 +24,7 @@ module Selector
     # @return [Array<String>]
     def extract_words_from_data data, gram_size=@gram_size
       (data.data.flat_map(&:split) - stopwords)
-                .delete_if { |e| e.size <= 3 }
+                .delete_if { |e| e.size <= 2 }
                 .each_cons(gram_size).map{|e| e.join " " }
     end
   end

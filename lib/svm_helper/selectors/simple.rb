@@ -5,7 +5,7 @@ module Selector
   # @author Andreas Eger
   #
   class Simple
-    THREAD_COUNT = (ENV['OMP_NUM_THREADS'] || 2).to_i
+    include ::ParallelHelper
     # stopword file
     #TODO use File.expand_path
     STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
@@ -21,8 +21,6 @@ module Selector
                               industry: 632,      # 1..14370 but not all ids used
                               career_level: 8 }   # 1..8
                           end
-
-
 
     attr_accessor :global_dictionary
 
@@ -48,7 +46,7 @@ module Selector
       words_per_data = extract_words data_set
       generate_global_dictionary words_per_data, dictionary_size
 
-      make_vectors(words_per_data) do |words,index|
+      p_map_with_index(words_per_data) do |words,index|
         word_set = words.uniq
         make_vector word_set, data_set[index]
       end
@@ -107,7 +105,7 @@ module Selector
     #
     # @return [Array<String>] list of words
     def extract_words_from_data data
-      (data.data.flat_map(&:split) - stopwords).delete_if { |e| e.size <= 3 }
+      (data.data.flat_map(&:split) - stopwords).delete_if { |e| e.size <= 2 }
     end
 
     def reset classification
@@ -133,16 +131,6 @@ module Selector
         classification: classification_array(data.id),
         label: data.label ? 1 : 0
       )
-    end
-
-    def make_vectors data, &block
-      if @parallel && RUBY_PLATFORM == 'java'
-        Parallel.map_with_index(data, in_threads: THREAD_COUNT ){|e,i| yield e,i }
-      elsif @parallel
-        Parallel.map_with_index(data, in_processes: THREAD_COUNT ){|e,i| yield e,i }
-      else
-        data.map.with_index {|e,i| yield e,i }
-      end
     end
 
     #
