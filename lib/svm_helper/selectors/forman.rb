@@ -41,7 +41,8 @@ module Selector
       features = all_words.reduce(Hash.new { |h, k| h[k] = [0,0] }) do |accumulator, bag|
         label = bag.label ? 1 : 0
         label_counts[label] += 1
-        bag.features.each do |word|
+        # only count a feature once per bag
+        bag.features.uniq.each do |word|
           unless accumulator.has_key?(word)
             accumulator[word] = [0,0]
           end
