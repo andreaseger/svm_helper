@@ -5,6 +5,12 @@ module Selector
   # http://www.google.com/patents/US20040059697
   #
   class Forman < Selector::Simple
+    attr_reader :word_selection
+
+    def initialize classification, args={}
+      super
+      @word_selection = args.fetch(:word_selection){ :grams1_2 }
+    end
 
     def label
       "forman"
@@ -83,7 +89,19 @@ module Selector
     # @return [OpenStruct<Array<String>,Boolean>] list of words
     def extract_words_from_data data, keep_label=false
       words = (data.data.flat_map(&:split) - stopwords).delete_if { |e| e.size <= 2 }
-      features = words + words.each_cons(2).map{|e| e.join " " }
+      features =  case word_selection
+                  when :grams1_2
+                    words + words.each_cons(2).map{|e| e.join " " }
+                  when :grams1_2_3
+                    words +
+                      words.each_cons(2).map{|e| e.join " " } +
+                      words.each_cons(3).map{|e| e.join " " }
+                  when :grams1_2_3_4
+                    words +
+                      words.each_cons(2).map{|e| e.join " " } +
+                      words.each_cons(3).map{|e| e.join " " } +
+                      words.each_cons(4).map{|e| e.join " " }
+                  end
       return features unless keep_label
       OpenStruct.new(
         features: features,
