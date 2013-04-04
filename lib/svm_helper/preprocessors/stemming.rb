@@ -19,7 +19,7 @@ module Preprocessor
     def process_job job
       PreprocessedData.new(
         data: [clean_title(job[:title]), clean_description(job[:description])],
-        id: map_id(job[:id]),
+        id: job[:id],
         label: job[:label]
       )
     end

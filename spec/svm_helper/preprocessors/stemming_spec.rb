@@ -6,6 +6,6 @@ describe Preprocessor::Stemming do
   let(:job) { FactoryGirl.build(:job) }
   let(:jobs) { [job] }
   it "should reduce words to their stem" do
-    preprocessor.clean_description("developer engineering").should == %w(develop engi)
+    preprocessor.clean_description("developer engineering").should == %w(develop engin)
   end
 end
