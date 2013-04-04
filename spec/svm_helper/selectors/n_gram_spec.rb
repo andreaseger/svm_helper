@@ -1,9 +1,9 @@
 require "spec_helper"
 
-describe Selector::NGram do
+describe Selector::Simple do
   it_behaves_like 'a selector'
 
-  let(:ngram) { Selector::NGram.new(:function, gram_size: 3) }
+  let(:ngram) { Selector::Simple.new(:function, word_selection: :grams, gram_size: 3) }
   context "#extract_words_from_data" do
     it "should generate a list of words from the data" do
       words = ngram.extract_words_from_data(FactoryGirl.build(:data))

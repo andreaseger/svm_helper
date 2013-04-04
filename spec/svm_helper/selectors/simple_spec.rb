@@ -7,9 +7,6 @@ describe Selector::Simple do
   it "should have select_feature_vector implemented" do
     expect { simple.generate_vectors([]) }.to_not raise_error
   end
-  context "#stopwords" do
-    it "simply loads them from a file"
-  end
   context "#extract_words_from_data" do
     it "should generate a list of words from the data" do
       words = simple.extract_words_from_data(FactoryGirl.build(:data))
@@ -109,6 +106,7 @@ describe Selector::Simple do
     context "parallel" do
       let(:parallel) { Selector::Simple.new(:function, parallel: true) }
       before(:each) do
+        require 'parallel'
         simple.stubs(:global_dictionary).returns(dictionary)
         parallel.stubs(:global_dictionary).returns(dictionary)
       end

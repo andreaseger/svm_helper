@@ -1,8 +1,8 @@
 require "spec_helper"
 
-describe Selector::WithBinaryEncoding do
+describe Selector::Simple do
   it_behaves_like 'a selector'
-  let(:simple) { Selector::WithBinaryEncoding.new(:career_level) }
+  let(:simple) { Selector::Simple.new(:career_level, classification_encoding: :binary) }
 
   let(:dictionary) { %w(auto pferd haus hase garten) }
   let(:data) { FactoryGirl.build(:data) }

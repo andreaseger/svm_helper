@@ -5,31 +5,24 @@ module Selector
   # @author Andreas Eger
   #
   class Simple
-    THREAD_COUNT = (ENV['OMP_NUM_THREADS'] || 2).to_i
+    include ::ParallelHelper
     # stopword file
     #TODO use File.expand_path
     STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
     # default dictionary size
     DEFAULT_DICTIONARY_SIZE = 800
 
-    CLASSIFICATIONS_SIZE= if defined?(Pjpp) == 'constant'
-                            { function: Pjpp::Function.count,
-                              industry: Pjpp::Industry.count,
-                              career_level: Pjpp::CareerLevel.count }
-                          else
-                            { function: 19,       # 1..19
-                              industry: 632,      # 1..14370 but not all ids used
-                              career_level: 8 }   # 1..8
-                          end
-
-
-
     attr_accessor :global_dictionary
-
+    attr_reader :classification_encoding,
+                :gram_size,
+                :word_selection
     def initialize classification, args={}
       @classification = classification
       @global_dictionary = args.fetch(:global_dictionary) {[]}
       @language = args.fetch(:language){'en'}
+      @classification_encoding = args.fetch(:classification_encoding){:bitmap}
+      @word_selection = args.fetch(:word_selection){ :single }
+      @gram_size = args.fetch(:gram_size) { 1 }
       @parallel = args.fetch(:parallel){false}
     end
 
@@ -48,7 +41,7 @@ module Selector
       words_per_data = extract_words data_set
       generate_global_dictionary words_per_data, dictionary_size
 
-      make_vectors(words_per_data) do |words,index|
+      p_map_with_index(words_per_data) do |words,index|
         word_set = words.uniq
         make_vector word_set, data_set[index]
       end
@@ -107,7 +100,44 @@ module Selector
     #
     # @return [Array<String>] list of words
     def extract_words_from_data data
-      (data.data.flat_map(&:split) - stopwords).delete_if { |e| e.size <= 3 }
+      words = (data.data.flat_map(&:split) - stopwords)
+                  .delete_if { |e| e.size <= 2 }
+      if gram_size > 1
+        words = words.each_cons(@gram_size).map{|e| e.join " " }
+      end
+      words
+    end
+
+    #
+    # fetches all words and two word phrases from one data entry, removes stopwords and very short words
+    # @param  data [PreprocessedData] preprocessed data entry
+    # @param  keep_label
+    #
+    # @return [OpenStruct<Array<String>,Boolean>] list of words
+    def extract_words_from_data data, keep_label=false
+      words = (data.data.flat_map(&:split) - stopwords).delete_if { |e| e.size <= 2 }
+      features =  case word_selection
+                  when :grams
+                    words.each_cons(@gram_size).map{|e| e.join " " }
+                  when :grams1_2
+                    words + words.each_cons(2).map{|e| e.join " " }
+                  when :grams1_2_3
+                    words +
+                      words.each_cons(2).map{|e| e.join " " } +
+                      words.each_cons(3).map{|e| e.join " " }
+                  when :grams1_2_3_4
+                    words +
+                      words.each_cons(2).map{|e| e.join " " } +
+                      words.each_cons(3).map{|e| e.join " " } +
+                      words.each_cons(4).map{|e| e.join " " }
+                  else
+                    words
+                  end
+      return features unless keep_label
+      OpenStruct.new(
+        features: features,
+        label: data.label
+      )
     end
 
     def reset classification
@@ -135,23 +165,40 @@ module Selector
       )
     end
 
-    def make_vectors data, &block
-      if @parallel && RUBY_PLATFORM == 'java'
-        Parallel.map_with_index(data, in_threads: THREAD_COUNT ){|e,i| yield e,i }
-      elsif @parallel
-        Parallel.map_with_index(data, in_processes: THREAD_COUNT ){|e,i| yield e,i }
-      else
-        data.map.with_index {|e,i| yield e,i }
-      end
-    end
+    BITMAP_ARRAY_SIZES= if defined?(Pjpp) == 'constant'
+                            { function: Pjpp::Function.count,
+                              industry: Pjpp::Industry.count,
+                              career_level: Pjpp::CareerLevel.count }
+                          else
+                            { function: 19,       # 1..19
+                              industry: 632,      # 1..14370 but not all ids used
+                              career_level: 8 }   # 1..8
+                          end
 
+    BINARY_ARRAY_SIZES = {
+            function: 8,        # max id 255, currently 19
+            industry: 16,       # max id 65535, currently 14370
+            career_level: 4 }   # max id 15, currently 8
     #
     # creates the classification specific part of the feature vector
     # @param  ids [Hash] hash with classification ids
     #
     # @return [Array<Integer>] list of size=count(classifcation_ids) with only one not zero item
     def classification_array(id)
-      Array.new(CLASSIFICATIONS_SIZE[@classification]){|n| n==(id-1) ? 1 : 0}
+      case @classification_encoding
+      when :binary
+        number_to_binary_array(id, BINARY_ARRAY_SIZES[@classification])
+      else # :bitmap
+        Array.new(BITMAP_ARRAY_SIZES[@classification]){|n| n==(id-1) ? 1 : 0}
+      end
+    end
+
+    def number_to_binary_array(number, size=8)
+      a=[]
+      (size-1).downto(0) do |i|
+        a<<number[i]
+      end
+      a
     end
   end
 end
