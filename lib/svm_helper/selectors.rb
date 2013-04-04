@@ -1,4 +1,5 @@
 require_relative 'selectors/simple'
-require_relative 'selectors/n_gram'
-require_relative 'selectors/with_binary_encoding'
-require_relative 'selectors/forman'
+require_relative 'selectors/calc'
+require_relative 'selectors/bi_normal_seperation'
+require_relative 'selectors/information_gain'
+require_relative 'selectors/bns_ig'
