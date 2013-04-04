@@ -6,9 +6,6 @@ module Selector
   #
   class Simple
     include ::ParallelHelper
-    # stopword file
-    #TODO use File.expand_path
-    STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
     # default dictionary size
     DEFAULT_DICTIONARY_SIZE = 800
 
@@ -19,7 +16,6 @@ module Selector
     def initialize classification, args={}
       @classification = classification
       @global_dictionary = args.fetch(:global_dictionary) {[]}
-      @language = args.fetch(:language){'en'}
       @classification_encoding = args.fetch(:classification_encoding){:bitmap}
       @word_selection = args.fetch(:word_selection){ :single }
       @gram_size = args.fetch(:gram_size) { 1 }
@@ -57,15 +53,6 @@ module Selector
     def generate_vector data, dictionary=global_dictionary
       word_set = Set.new extract_words_from_data(data)
       make_vector word_set, data, dictionary
-    end
-
-    #
-    # loads a txt file with stop words
-    # @param  location String folder with stopword lists
-    #
-    # @return [Array<String>] Array of stopwords
-    def stopwords(location=STOPWORD_LOCATION)
-      @stopwords ||= IO.read(File.join(location,@language)).split
     end
 
     #
@@ -115,7 +102,8 @@ module Selector
     #
     # @return [OpenStruct<Array<String>,Boolean>] list of words
     def extract_words_from_data data, keep_label=false
-      words = (data.data.flat_map(&:split) - stopwords).delete_if { |e| e.size <= 2 }
+      # assume the first token is the title an preserve it
+      title, *words = data.data.flatten
       features =  case word_selection
                   when :grams
                     words.each_cons(@gram_size).map{|e| e.join " " }
@@ -133,6 +121,7 @@ module Selector
                   else
                     words
                   end
+      features.unshift(title)
       return features unless keep_label
       OpenStruct.new(
         features: features,

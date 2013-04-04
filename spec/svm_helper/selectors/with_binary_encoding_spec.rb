@@ -1,7 +1,6 @@
 require "spec_helper"
 
-describe Selector::Simple do
-  it_behaves_like 'a selector'
+describe "binary encoded classification" do
   let(:simple) { Selector::Simple.new(:career_level, classification_encoding: :binary) }
 
   let(:dictionary) { %w(auto pferd haus hase garten) }

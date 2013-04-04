@@ -25,8 +25,15 @@ module Preprocessor
     # filter for used job tokens
     CODE_TOKEN_FILTER = /\[[^\]]*\]|\([^\)]*\)|\{[^\}]*\}|\S*\d+\w+/
 
+    # stopword file
+    #TODO use File.expand_path
+    STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
+
+
     def initialize args={}
+      @language = args.fetch(:language){'en'}
       @parallel = args.fetch(:parallel){false}
+      @stopwords ||= IO.read(File.join(STOPWORD_LOCATION,@language)).split
     end
 
     def label
@@ -54,6 +61,14 @@ module Preprocessor
       end
     end
 
+    #
+    # loads a txt file with stop words
+    # @param  location String folder with stopword lists
+    #
+    # @return [Array<String>] Array of stopwords
+    def strip_stopwords(text)
+      (text.split - @stopwords).delete_if { |e| e.size <= 2 }
+    end
 
     #
     # converts string into a cleaner version
@@ -75,17 +90,19 @@ module Preprocessor
     #
     # @return [String] clean and lowercase version of input
     def clean_description desc
-      desc.gsub(XML_TAG_FILTER,' ')
-          .gsub(EMAIL_FILTER,'')
-          .gsub(URL_FILTER,'')
-          .gsub(GENDER_FILTER,'')
-          .gsub(NEW_LINES,'')
-          .gsub(SYMBOL_FILTER,' ')
-          .gsub(WHITESPACE,' ')
-          .gsub(WORDS_IN_BRACKETS, '\1')
-          .gsub(CODE_TOKEN_FILTER,'')
-          .downcase
-          .strip
+      strip_stopwords(
+        desc.gsub(XML_TAG_FILTER,' ')
+            .gsub(EMAIL_FILTER,'')
+            .gsub(URL_FILTER,'')
+            .gsub(GENDER_FILTER,'')
+            .gsub(NEW_LINES,'')
+            .gsub(SYMBOL_FILTER,' ')
+            .gsub(WHITESPACE,' ')
+            .gsub(WORDS_IN_BRACKETS, '\1')
+            .gsub(CODE_TOKEN_FILTER,'')
+            .downcase
+            .strip
+        )
     end
 
     private

@@ -41,6 +41,7 @@ describe Preprocessor::Simple do
     end
   end
 
+
   context "#clean_title" do
     it "should be downcased" do
       job = FactoryGirl.build(:job_title_downcasing)
@@ -75,29 +76,39 @@ describe Preprocessor::Simple do
         FactoryGirl.build(:job_description_w_code_token),
         FactoryGirl.build(:job_description_w_gender) ]
     }
+    it "should call strip_stopwords" do
+      simple.expects(:strip_stopwords)
+      simple.clean_description(jobs[0][:description])
+    end
     it "should remove html/xml tags" do
-      desc = simple.clean_description(jobs[0][:description])
+      desc = simple.clean_description(jobs[0][:description]).join ' '
       desc.should_not match(/<(.*?)>/)
     end
     it "should remove new lines" do
-      desc = simple.clean_description(jobs[0][:description])
+      desc = simple.clean_description(jobs[0][:description]).join ' '
       desc.should_not match(/\r\n|\n|\r/)
     end
     it "should remove all special characters" do
-      desc = simple.clean_description(jobs[2][:description])
+      desc = simple.clean_description(jobs[2][:description]).join ' '
       desc.should_not match(/[^a-z öäü]/i)
     end
     it "should remove gender tokens" do
-      desc = simple.clean_description(jobs[3][:description])
+      desc = simple.clean_description(jobs[3][:description]).join ' '
       desc.should_not match(%r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)})
     end
     it "should remove job code token" do
-      desc = simple.clean_description(jobs[4][:description])
+      desc = simple.clean_description(jobs[4][:description]).join ' '
       desc.should_not match(/\[.*\]|\(.*\)|\{.*\}|\d+\w+/)
     end
     it "should be downcased" do
-      desc = simple.clean_description(jobs[2][:description])
+      desc = simple.clean_description(jobs[2][:description]).join ' '
       desc.should_not match(/[^a-z öäü]/)
+    end
+  end
+
+  context "strip_stopwords" do
+    it "should remove words like 'and' from the text" do
+      simple.strip_stopwords("Dogs and cats").should == %w(Dogs cats)
     end
   end
   context "parallel" do

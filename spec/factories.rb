@@ -18,15 +18,15 @@ FactoryGirl.define do
 
 
   factory :data, class: PreprocessedData do
-    data ["haus fooo garten baaz pferd fooo"]
+    data %w(haus fooo garten baaz pferd fooo)
     id 7
     label true
   end
   factory :data_w_short_words, parent: :data do
-    data ["auto fo pferd bz gooo fooo 2"]
+    data %w(auto pferd gooo fooo)
     label false
   end
   factory :data_w_multiple_sections, parent: :data do
-    data ["meeh fo auto","bz baaz fooo 2"]
+    data [%w(meeh auto),%w(baaz fooo)]
   end
 end
