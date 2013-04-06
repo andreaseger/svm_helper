@@ -1,5 +1,5 @@
 require_relative 'simple'
-require 'fast_stemmer'
+require 'lingua/stemmer'
 module Preprocessor
   #
   # Preprocessor Base Class
@@ -8,12 +8,16 @@ module Preprocessor
   #
   class Stemming < Simple
 
+    def initialize(args={})
+      super
+      @stemmer = Lingua::Stemmer.new(language: @language)
+    end
     def label
       "with_stemming"
     end
 
     def clean_description desc
-      super.map(&:stem)
+      super.map{|w| @stemmer.stem(w) }
     end
     private
     def process_job job
