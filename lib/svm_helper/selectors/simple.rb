@@ -70,6 +70,10 @@ module Selector
       @global_dictionary = words.last(size).map(&:first).reverse
     end
 
+    def build_dictionary data_set, dictionary_size=DEFAULT_DICTIONARY_SIZE
+      words_per_data = extract_words data_set
+      generate_global_dictionary words_per_data, dictionary_size
+    end
     #
     # extracts the words of all provided data entries
     # @param  data_set [Array<PreprocessedData>] list of preprocessed data

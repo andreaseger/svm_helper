@@ -47,6 +47,19 @@ describe Selector::Simple do
       simple.global_dictionary.should eq(%w(fooo auto baaz))
     end
   end
+  context "#build_dictionary" do
+    let(:data) { [FactoryGirl.build_list(:data,1),
+                  FactoryGirl.build_list(:data_w_short_words,2),
+                  FactoryGirl.build_list(:data_w_multiple_sections,3)].flatten }
+    it "should return a list of n words" do
+      simple.build_dictionary(data,2)
+      simple.global_dictionary.should have(2).things
+    end
+    it "should return a list of the n most used words in the data array" do
+      simple.build_dictionary(data,3)
+      simple.global_dictionary.should eq(%w(fooo auto baaz))
+    end
+  end
   context "#generate_vector" do
     let(:dictionary) { %w(auto pferd haus hase garten) }
     let(:data) { FactoryGirl.build(:data) }

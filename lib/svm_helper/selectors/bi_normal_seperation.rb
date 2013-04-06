@@ -67,6 +67,10 @@ module Selector
                                 .map{|e| e[0] }
     end
 
+    def build_dictionary data_set, dictionary_size=DEFAULT_DICTIONARY_SIZE
+      words_per_data = extract_words data_set, true
+      generate_global_dictionary words_per_data, dictionary_size
+    end
     #
     # extracts the words of all provided data entries
     # @param  data_set [Array<PreprocessedData>] list of preprocessed data
