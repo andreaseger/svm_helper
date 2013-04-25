@@ -28,6 +28,7 @@ module Preprocessor
     # stopword file
     #TODO use File.expand_path
     STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
+    attr_accessor :language
 
 
     def initialize args={}
