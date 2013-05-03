@@ -1,3 +1,4 @@
+require 'set'
 module Selector
   #
   # Selector which uses a simple dictionary to generate feature vectors
@@ -38,7 +39,7 @@ module Selector
       generate_global_dictionary words_per_data, dictionary_size
 
       p_map_with_index(words_per_data) do |words,index|
-        word_set = words.uniq
+        word_set = Set.new(words)
         make_vector word_set, data_set[index]
       end
     end
