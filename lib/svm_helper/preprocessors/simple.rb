@@ -35,10 +35,11 @@ module Preprocessor
       @language = args.fetch(:language){'en'}
       @parallel = args.fetch(:parallel){false}
       @stopwords ||= IO.read(File.join(STOPWORD_LOCATION,@language)).split
+      @id_map = args.fetch(:id_map){false}
     end
 
     def label
-      "simple"
+      "simple#{@id_map ? ' with id map' : ''}"
     end
     #
     # cleans provided jobs
@@ -108,10 +109,18 @@ module Preprocessor
 
     private
 
+    def map_id(id)
+      if @id_map
+        @id_map[id]
+      else
+        id
+      end
+    end
+
     def process_job job
       PreprocessedData.new(
         data: [clean_title(job[:title]), clean_description(job[:description])],
-        id: job[:id],
+        id: map_id(job[:id]),
         label: job[:label]
       )
     end
