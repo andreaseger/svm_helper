@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = SvmHelper::VERSION
   gem.authors       = ["Andreas Eger"]
   gem.email         = ["dev@eger-andreas.de"]
-  gem.description   = %q{Shared helper classes for usage in context of SVM at experteer}
+  gem.description   = %q{helper classes to create FeatureVectors from online job postings}
   gem.summary       = %q{Preprocessor and Selector classes to generate FeatureVectors from Job data}
   gem.homepage      = "https://github.com/sch1zo/svm_helper"
 
