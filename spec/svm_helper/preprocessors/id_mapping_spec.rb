@@ -1,8 +1,7 @@
 require 'spec_helper'
 
-describe Preprocessor::IDMapping do
-  it_behaves_like 'a preprocessor'
-  let(:preprocessor) { Preprocessor::IDMapping.new(1423=>3, 523=>54) }
+describe Preprocessor::Simple do
+  let(:preprocessor) { Preprocessor::Simple.new(ip_map: {1423=>3, 523=>54}) }
   let(:job) { FactoryGirl.build(:job) }
   let(:jobs) { [job] }
   it "should make use of a industry_map" do
