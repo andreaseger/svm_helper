@@ -7,6 +7,7 @@ module Selector
   class BNS_IG < Selector::BiNormalSeperation
     include IG
 
+    # printable label for this Selector
     def label
       "BiNormalSeperation_InformationGain"
     end

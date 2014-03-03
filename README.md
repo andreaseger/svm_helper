@@ -1,22 +1,19 @@
-# SvmHelper
+# Text Classifiaction Helper
 
-Shared helper classes for usage in context of SVM at experteer
+This more generalized version of svm helper plans to be more flexible in terms
+of how it can be used as preprocessing steps for Text Classifcation methods.
 
-[![Build Status](https://travis-ci.org/sch1zo/svm_helper.png?branch=master)](https://travis-ci.org/sch1zo/svm_helper)
+[![Build Status](https://travis-ci.org/sch1zo/svm_helper.png?branch=generalization)](https://travis-ci.org/sch1zo/svm_helper)
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'svm_helper'
+    gem 'svm_helper', github: 'sch1zo/svm_helper', branch: 'generalization'
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install svm_helper
 
 ## Usage
 
@@ -31,6 +28,10 @@ Be aware that a FeatureVector has two Attributes:
     data: the feature array itself
     label: 1 for true, 0 for false
 
+## External Data
+
+The preprocessing and selections steps make use of stopword lists collected in
+this [google project](https://code.google.com/p/stop-words/).
 
 ## Contributing
 

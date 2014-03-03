@@ -7,6 +7,8 @@ class PreprocessedData
     end
   end
 
+  # comperator
+  # @param [PreprocessedData] another
   def == another
     [:data, :id, :label].map { |e| self.send(sym) == another.send(sym)}.all?
   end

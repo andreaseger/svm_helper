@@ -23,6 +23,7 @@ module Selector
       @parallel = args.fetch(:parallel){false}
     end
 
+    # printable label for this Selector
     def label
       "simple"
     end
@@ -30,7 +31,6 @@ module Selector
     #
     # generates a list of feature vetors and their labels from preprocessed data
     # @param  data_set [Array<PreprocessedData>] list of preprocessed data
-    # @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @param  dictionary_size [Integer] Size of a dictionary to create if non exists
     #
     # @return [Array<FeatureVector>] list of feature vectors and labels
@@ -47,7 +47,6 @@ module Selector
     #
     # generates a feature vector with its label
     # @param  data [PreprocessedData]
-    # @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @param  dictionary [Array] dictionary to use for this selection
     #
     # @return [FeatureVector]
@@ -175,7 +174,7 @@ module Selector
             career_level: 4 }   # max id 15, currently 8
     #
     # creates the classification specific part of the feature vector
-    # @param  ids [Hash] hash with classification ids
+    # @param  id [Hash] hash with classification ids
     #
     # @return [Array<Integer>] list of size=count(classifcation_ids) with only one not zero item
     def classification_array(id)

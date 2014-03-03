@@ -7,6 +7,7 @@ module Selector
   class BiNormalSeperation < Selector::Simple
     include BNS
 
+    # nice printable label for this selector
     def label
       "BiNormalSeperation"
     end
@@ -18,7 +19,6 @@ module Selector
     #
     # generates a list of feature vetors and their labels from preprocessed data
     # @param  data_set [Array<PreprocessedData>] list of preprocessed data
-    # @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
     # @param  dictionary_size [Integer] Size of a dictionary to create if non exists
     #
     # @return [Array<FeatureVector>] list of feature vectors and labels

@@ -40,21 +40,20 @@ module Preprocessor
     def label
       "simple"
     end
+
     #
     # cleans provided jobs
-    # @overload process(jobs, classification)
-    #   @param  jobs [Hash] single Job
-    #   @option title
-    #   @option description
-    #   @option id
-    #   @option label
-    #   @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
-    # @overload process(jobs, classification)
-    #   @param  jobs [Array<Hash>] list of Jobs
-    #   @param  classification [Symbol] in `:industry`, `:function`, `:career_level`
+    # @overload process(jobs)
+    #   @param jobs [Array<Hash>] list of jobs
+    # @overload process(job)
+    #   @param [Hash] job
+    #   @option job [String] title
+    #   @option job [String] description
+    #   @option job [Integer] id
+    #   @option job [Symbol] label
     #
-    # @return [Array<PreprocessedData>] list of processed job data - or singe job data
-    def process jobs
+    # @return [Array<PreprocessedData>] list of processed job data
+    def process(jobs)
       if jobs.is_a? Array
         p_map(jobs) {|job| process_job job }
       else
@@ -63,10 +62,10 @@ module Preprocessor
     end
 
     #
-    # loads a txt file with stop words
-    # @param  location String folder with stopword lists
+    # delete all stopwords and v. short words from given text
+    # @param text [String] text to strip
     #
-    # @return [Array<String>] Array of stopwords
+    # @return [Array<String>] Array of remaining words
     def strip_stopwords(text)
       (text.split - @stopwords).delete_if { |e| e.size <= 2 }
     end

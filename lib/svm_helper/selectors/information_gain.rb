@@ -7,6 +7,7 @@ module Selector
   class InformationGain < Selector::BiNormalSeperation
     include IG
 
+    # nice printable label for this selector
     def label
       "InformationGain"
     end

@@ -1,5 +1,3 @@
-require "spec_helper"
-
 shared_examples_for 'a selector' do
   let(:selector) { described_class.new(:function) }
   let(:data) { FactoryGirl.build(:data) }

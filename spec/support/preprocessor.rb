@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 shared_examples_for 'a preprocessor' do
   let(:preprocessor) { described_class.new(1423=>3, 523=>54) }
   let(:job) { FactoryGirl.build(:job) }
