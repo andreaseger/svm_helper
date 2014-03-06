@@ -1,4 +1,41 @@
 module Selector
+  # module used while makeing a bag of words
+  module BagOfWords
+    #
+    # creates a Hash for all words which describes how often each word
+    # appeared in each class
+    #
+    # the result hash will look something like this
+    # {
+    #   "some" => [34,2],
+    #   "words" => [35,6],
+    #   "for" => [4,35],
+    #   "each" => [23,12],
+    #   "class" => [54,11],
+    #   ...
+    # }
+    #
+    # @param all_words (see #extract_words)
+    # @params number_of_labels [Integer] how many labels are there, currently only works correctly for 2
+    #
+    # @return [Hash, Array<Integer,Integer>] Hash of apperence count of words per label + number of 
+    def make_bag all_words, number_of_labels=2
+      count_per_label = Array.new(number_of_labels, 0)
+
+      accumulator = Hash.new { |h, k| h[k] = Array.new(number_of_labels, 0) }
+      all_words.each do |vector|
+        label = vector.label ? 1 : 0
+        count_per_label[label] += 1
+        # only count a feature once per vector
+        vector.features.uniq.each do |word|
+          # increment count for the current word and the label of this vector
+          accumulator[word][label] += 1
+        end
+      end
+      [accumulator, *count_per_label]
+    end
+  end
+
   # module which provides methods to calculate the information gain
   module IG
 

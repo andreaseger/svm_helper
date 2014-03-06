@@ -21,20 +21,8 @@ module Selector
     def generate_global_dictionary all_words, size=DEFAULT_DICTIONARY_SIZE
       return unless global_dictionary.empty?
 
-      label_counts = [0,0]
-      features = all_words.reduce(Hash.new { |h, k| h[k] = [0,0] }) do |accumulator, bag|
-        label = bag.label ? 1 : 0
-        label_counts[label] += 1
-        # only count a feature once per bag
-        bag.features.uniq.each do |word|
-          unless accumulator.has_key?(word)
-            accumulator[word] = [0,0]
-          end
-          accumulator[word][label] += 1
-        end
-        accumulator
-      end
-      neg, pos = label_counts
+      features, pos, neg = make_bag(all_words)
+
       words = p_map(features) do |word, counts|
                 next if counts.any? { |e| e==0 } # skip words only appearing in one class
                 bns = bi_normal_seperation(pos, neg, *counts)
