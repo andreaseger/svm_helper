@@ -29,7 +29,7 @@ describe Selector::BiNormalSeperation do
     end
     it "should return a list of the n most used words in the data array" do
       bns.generate_global_dictionary(words_per_data,3)
-      bns.global_dictionary.should eq(%w(fooo auto pferd))
+      bns.global_dictionary.should eq(%w(fooo pferd auto))
     end
   end
 end

@@ -1,38 +1,18 @@
-require_relative 'bi_normal_seperation'
+require_relative 'base'
 module Selector
   #
   # Feature Selection for Text Classification - HP Labs
   # http://www.google.com/patents/US20040059697
   #
-  class InformationGain < Selector::BiNormalSeperation
-    include IG
-
+  class InformationGain < Selector::Base
     # nice printable label for this selector
     def label
       "InformationGain"
     end
 
-    #
-    # generates a list of words used as dictionary
-    # @param  all_words (see #extract_words)
-    # @param  size dictionary size
-    #
-    # @return [Array<String>] list of words
-    def generate_global_dictionary all_words, size=DEFAULT_DICTIONARY_SIZE
-      return unless global_dictionary.empty?
-
-      features, pos, neg = make_bag(all_words)
-
-      words = p_map(features) do |word, counts|
-                next if counts.any? { |e| e==0 } # skip words only appearing in one class
-                tp, fp = counts
-                ig = information_gain(pos, neg, tp, fp)
-                [word, ig.abs]
-              end
-      @global_dictionary = words.compact
-                                .sort_by{|e| e[1]}
-                                .last(size)
-                                .map{|e| e[0] }
+  private
+    def fitness(*args)
+      Algorithms::InformationGain.calculate(*args).abs
     end
   end
 end
