@@ -2,9 +2,15 @@ require 'spec_helper'
 
 describe Algorithms::BiNormalSeperation do
   it_behaves_like 'a algorithm'
-  context "cdf" do
-    # not ideal to test a private method but I want to make sure it works
-    # correctly, but also not expose it
+  # not ideal to test private methods but I want to make sure it works
+  # correctly, but also not expose them
+  context "calclate" do
+    it "uses the inverse_cumulative_distribution_function twice" do
+      described_class.any_instance.expects(:inverse_cumulative_distribution_function).twice.returns(2)
+      described_class.calculate(1,2,3,4)
+    end
+  end
+  context "cdf & inverse_cdf" do
     let(:algo) { described_class.new(1,2,3,4) } #params not important
     [
       [0.5, 0.691462],
@@ -30,7 +36,7 @@ describe Algorithms::BiNormalSeperation do
         expect(
           algo.send(:inverse_cumulative_distribution_function,
             algo.send(:cumulative_distribution_function, value) )
-        ).to be_within(0.01).of(value)
+        ).to be_within(0.001).of(value)
       end
     end
   end
