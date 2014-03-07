@@ -22,7 +22,7 @@ describe Selector::BiNormalSeperation do
     let(:data) { [FactoryGirl.build_list(:data,1),
                   FactoryGirl.build_list(:data_w_short_words,4),
                   FactoryGirl.build_list(:data_w_multiple_sections,3)].flatten }
-    let(:words_per_data) { bns.extract_words(data,true) }
+    let(:words_per_data) { bns.send(:extract_words,data,true) }
     it "should return a list of n words" do
       bns.generate_global_dictionary(words_per_data,2)
       bns.global_dictionary.should have(2).things

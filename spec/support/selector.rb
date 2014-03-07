@@ -14,4 +14,7 @@ shared_examples_for 'a selector' do
   it "should respond to generate_vectors" do
     selector.should respond_to(:generate_vectors)
   end
+  it "should have select_feature_vector implemented" do
+    expect { simple.generate_vectors([]) }.to_not raise_error
+  end
 end

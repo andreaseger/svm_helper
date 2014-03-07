@@ -1,11 +1,22 @@
 require "spec_helper"
 
-describe Selector::Simple do
+class TestSelector < Selector::Base
+
+describe TestSelector do
   it_behaves_like 'a selector'
 
-  let(:simple) { Selector::Simple.new(:function) }
-  it "should have select_feature_vector implemented" do
-    expect { simple.generate_vectors([]) }.to_not raise_error
+  let(:simple) { described_class.new(:function) }
+  context "#extract_words" do
+    it "should call extract_words_from_data for each data object" do
+      simple.expects(:extract_words_from_data).times(4)
+      simple.extract_words(FactoryGirl.build_list(:data,4))
+    end
+    it "should return an array of word arrays" do
+      words_per_data = simple.extract_words(FactoryGirl.build_list(:data,4))
+      words_per_data.each do |words|
+        words.should eq(simple.extract_words_from_data(FactoryGirl.build(:data)))
+      end
+    end
   end
   context "#extract_words_from_data" do
     it "should generate a list of words from the data" do
@@ -19,18 +30,6 @@ describe Selector::Simple do
     it "should process multiple sections in the data" do
       words = simple.extract_words_from_data(FactoryGirl.build(:data_w_multiple_sections))
       words.should have(4).things
-    end
-  end
-  context "#extract_words" do
-    it "should call extract_words_from_data for each data object" do
-      simple.expects(:extract_words_from_data).times(4)
-      simple.extract_words(FactoryGirl.build_list(:data,4))
-    end
-    it "should return an array of word arrays" do
-      words_per_data = simple.extract_words(FactoryGirl.build_list(:data,4))
-      words_per_data.each do |words|
-        words.should eq(simple.extract_words_from_data(FactoryGirl.build(:data)))
-      end
     end
   end
   context "#generate_global_dictionary" do
@@ -63,7 +62,7 @@ describe Selector::Simple do
   context "#generate_vector" do
     let(:dictionary) { %w(auto pferd haus hase garten) }
     let(:data) { FactoryGirl.build(:data) }
-    let(:simple) { Selector::Simple.new(:career_level) }
+    let(:simple) { described_class.new(:career_level) }
     let(:vector) { simple.generate_vector(data) }
 
     before(:each) do
@@ -117,7 +116,7 @@ describe Selector::Simple do
       simple.generate_vectors(data)
     end
     context "parallel" do
-      let(:parallel) { Selector::Simple.new(:function, parallel: true) }
+      let(:parallel) { described_class.new(:function, parallel: true) }
       before(:each) do
         require 'parallel'
         simple.stubs(:global_dictionary).returns(dictionary)
@@ -127,6 +126,61 @@ describe Selector::Simple do
         single = simple.generate_vectors(data)
         p_data = parallel.generate_vectors(data)
         single.each.with_index {|e,i| e.data.should == p_data[i].data}
+      end
+    end
+  end
+
+  context "n-grams" do
+    let(:ngram) { described_class.new(:function, word_selection: :grams, gram_size: 3) }
+    context "#extract_words_from_data" do
+      it "should generate a list of words from the data" do
+        words = ngram.extract_words_from_data(FactoryGirl.build(:data))
+        words.should have(4).things
+      end
+      it "should remove words with 3 characters or less" do
+        words = ngram.extract_words_from_data(FactoryGirl.build(:data_w_short_words))
+        words.should have(2).things
+      end
+      it "should process multiple sections in the data" do
+        words = ngram.extract_words_from_data(FactoryGirl.build(:data_w_multiple_sections))
+        words.should have(2).things
+      end
+    end
+  end
+
+  context "binary encoded classification" do
+    let(:simple) { described_class.new(:career_level, classification_encoding: :binary) }
+
+    let(:dictionary) { %w(auto pferd haus hase garten) }
+    let(:data) { FactoryGirl.build(:data) }
+    let(:vector) { simple.generate_vector(data) }
+
+    before(:each) do
+      simple.stubs(:global_dictionary).returns(dictionary)
+    end
+    it "should build a feature vector for each dataset with the size of the dictionary plus classifications" do
+      vector.data.should have(5+4).things
+    end
+    it "should set 0 if a word from the dictionary NOT exists at the corresponding index" do
+      vector.data[0].should eq(0)
+    end
+    it "should set 1 if a word from the dictionary exists at the corresponding index" do
+      vector.data[1].should eq(1)
+    end
+    it "should set 0's and 1's for each word in the dictionary" do
+      vector.data.first(5).should eq([0,1,1,0,1])
+    end
+    it "should add a n-sized array of 0's and 1's to the results" do
+      vector.data.last(4).should eq([0,1,1,1])
+    end
+    it "should call make_vector" do
+      simple.expects(:make_vector).once
+      simple.generate_vector(data)
+    end
+    context "custom dictionary" do
+      it "should accept a custom dictionary" do
+        vector = simple.generate_vector(data, %w(pferd flasche glas))
+        vector.data.should eq([[1,0,0],[0,1,1,1]].flatten)
       end
     end
   end
