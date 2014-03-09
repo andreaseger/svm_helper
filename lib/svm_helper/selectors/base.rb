@@ -91,7 +91,7 @@ module Selector
 
       accumulator = Hash.new { |h, k| h[k] = Array.new(number_of_labels, 0) }
       all_words.each do |vector|
-        label = vector.label ? 1 : 0
+        label = vector.correct ? 1 : 0
         count_per_label[label] += 1
         # only count a feature once per vector
         vector.features.uniq.each do |word|

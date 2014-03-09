@@ -129,7 +129,7 @@ module Selector
       return features unless keep_label
       OpenStruct.new(
         features: features,
-        label: data.label
+        correct: data.correct
       )
     end
 
@@ -154,7 +154,7 @@ module Selector
                      words.include?(dic_word) ? 1 : 0
                    },
         classification: classification_array(data.id),
-        label: data.label ? 1 : 0
+        correct: data.correct ? 1 : 0
       )
     end
 

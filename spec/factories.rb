@@ -20,13 +20,23 @@ FactoryGirl.define do
   factory :data, class: PreprocessedData do
     data %w(haus fooo garten baaz pferd fooo)
     id 7
-    label true
+    correct true
   end
   factory :data_w_short_words, parent: :data do
     data %w(auto pferd gooo fooo)
-    label false
+    correct false
   end
   factory :data_w_multiple_sections, parent: :data do
     data [%w(meeh auto),%w(baaz fooo)]
+  end
+
+  factory :vector, class: FeatureVector do
+    word_data %w(haus fooo garten baaz pferd fooo)
+    classification [0,0,1,0]
+    correct true
+  end
+  factory :vector_false, parent: :vector do
+    word_data %w(some more words)
+    correct false
   end
 end

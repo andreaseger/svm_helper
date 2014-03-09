@@ -1,3 +1,4 @@
+require_relative 'base'
 # encoding: UTF-8
 module Preprocessor
   #
@@ -5,8 +6,7 @@ module Preprocessor
   #
   # @author Andreas Eger
   #
-  class Simple
-    include ::ParallelHelper
+  class Simple < Base
     # filters most gender stuff
     GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
     # filters most wierd symbols
@@ -21,7 +21,7 @@ module Preprocessor
     # filters multiple whitesspace
     WHITESPACE = /(\s| )+/
     # filters all kind of XMl/HTML tags
-    XML_TAG_FILTER = /<(.*?)>/
+    XML_TAG_FILTER = /<[^>]+?>/
     # filter for used job tokens
     CODE_TOKEN_FILTER = /\[[^\]]*\]|\([^\)]*\)|\{[^\}]*\}|\S*\d+\w+/
 
@@ -32,14 +32,10 @@ module Preprocessor
 
 
     def initialize args={}
+      super
       @language = args.fetch(:language){'en'}
-      @parallel = args.fetch(:parallel){false}
       @stopwords ||= IO.read(File.join(STOPWORD_LOCATION,@language)).split
       @id_map = args.fetch(:id_map){false}
-    end
-
-    def label
-      "simple#{@id_map ? ' with id map' : ''}"
     end
 
     #
@@ -120,7 +116,7 @@ module Preprocessor
       PreprocessedData.new(
         data: [clean_title(job[:title]), clean_description(job[:description])],
         id: map_id(job[:id]),
-        label: job[:label]
+        correct: job[:label]
       )
     end
   end

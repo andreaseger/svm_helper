@@ -1,5 +1,6 @@
 class FeatureVector
-  attr_accessor :word_data, :classification, :label
+  ATTRS = [:word_data, :classification, :correct]
+  attr_accessor *ATTRS
 
   def initialize(params={})
     params.each do |key, value|
@@ -11,7 +12,10 @@ class FeatureVector
     word_data + classification
   end
 
+  # comperator
+  # @param [FeatureVector] another
   def == another
-    [:word_data, :classification, :label].map { |e| self.send(sym) == another.send(sym) }.all?
+    return false if self.class != another.class
+    ATTRS.map { |e| self.send(e) == another.send(e) }.all?
   end
 end

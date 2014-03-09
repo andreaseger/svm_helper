@@ -12,9 +12,6 @@ module Preprocessor
       super
       @stemmer = Lingua::Stemmer.new(language: @language)
     end
-    def label
-      "with_stemming"
-    end
 
     def clean_description desc
       super.map{|w| @stemmer.stem(w) }
@@ -24,7 +21,7 @@ module Preprocessor
       PreprocessedData.new(
         data: [clean_title(job[:title]), clean_description(job[:description])],
         id: job[:id],
-        label: job[:label]
+        correct: job[:label]
       )
     end
   end

@@ -8,20 +8,23 @@ describe Preprocessor::Simple do
   it "should have process implemented" do
     -> { simple.process([]) }.should_not raise_error
   end
-  context do
+  it "should have a label" do
+    expect(simple.label).to eq("Preprocessor::Simple")
+  end
+  context "correct flag" do
     before(:each) do
       @jobs = FactoryGirl.build_list :job, 3
     end
     it "should work with jobs with quality check" do
       -> {simple.process(@jobs) }.should_not raise_error
     end
-    it "should set labels to true if quality check exists and label was true" do
+    it "should set labels to true if quality check exists and is true" do
       @jobs.map!{|e| e[:label] = true;e }
-      simple.process(@jobs).each{|e| e.label.should be_true}
+      simple.process(@jobs).each{|e| e.correct.should be_true}
     end
-    it "should set labels to false if quality check exists and label false" do
+    it "should set labels to false if quality check exists and is false" do
       @jobs.map!{|e| e[:label] = false;e }
-      simple.process(@jobs).each{|e| e.label.should be_false}
+      simple.process(@jobs).each{|e| e.correct.should be_false}
     end
   end
 
@@ -125,6 +128,15 @@ describe Preprocessor::Simple do
       single = simple.process(jobs)
       p_data = parallel.process(jobs)
       single.each.with_index { |e,i| e.data.should == p_data[i].data }
+    end
+  end
+  context "id_mapping" do
+    let(:preprocessor) { Preprocessor::Simple.new(ip_map: {1423=>3, 523=>54}) }
+    let(:job) { FactoryGirl.build(:job) }
+    let(:jobs) { [job] }
+    it "should make use of a industry_map" do
+      preprocessor.expects(:map_id)
+      preprocessor.process(jobs)
     end
   end
 end
