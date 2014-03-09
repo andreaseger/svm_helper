@@ -1,5 +1,5 @@
 class FeatureVector
-  ATTRS = [:word_data, :classification, :correct]
+  ATTRS = [:word_data, :classification, :classification_array, :correct]
   attr_accessor *ATTRS
 
   def initialize(params={})
@@ -8,8 +8,12 @@ class FeatureVector
     end
   end
 
+  def correct?
+    correct != 0
+  end
+
   def data
-    word_data + classification
+    word_data + classification_array
   end
 
   # comperator
@@ -18,4 +22,5 @@ class FeatureVector
     return false if self.class != another.class
     ATTRS.map { |e| self.send(e) == another.send(e) }.all?
   end
+
 end

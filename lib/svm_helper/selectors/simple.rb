@@ -153,7 +153,8 @@ module Selector
         word_data: dictionary.map{|dic_word|
                      words.include?(dic_word) ? 1 : 0
                    },
-        classification: classification_array(data.id),
+        classification_array: classification_array(data.id),
+        classification: data.id,
         correct: data.correct ? 1 : 0
       )
     end
