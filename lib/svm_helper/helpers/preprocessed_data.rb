@@ -1,3 +1,8 @@
+#
+# Wrapper for stripped text data
+#
+# @author Andreas Eger
+#
 class PreprocessedData
   ATTRS = [:data, :id, :correct]
   attr_accessor *ATTRS
