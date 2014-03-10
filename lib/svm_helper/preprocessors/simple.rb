@@ -1,5 +1,5 @@
-require_relative 'base'
 # encoding: UTF-8
+require_relative 'base'
 module Preprocessor
   #
   # Preprocessor which just cleans to text
