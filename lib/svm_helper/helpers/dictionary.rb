@@ -1,3 +1,3 @@
-class Dictionary
+class Dictionary < Array
 
 end

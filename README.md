@@ -15,23 +15,18 @@ And then execute:
 
     $ bundle
 
-## Usage
+## ToDo
 
-Dataflow is normally something like this:
-
-    Job --Preprocessor--> PreprocessedData --Selector--> FeatureVector
-
-The FeatureVector can now be used for training or prediction in a (libsvm) SVM.
-
-Be aware that a FeatureVector has two Attributes:
-
-    data: the feature array itself
-    label: 1 for true, 0 for false
-
-## External Data
-
-The preprocessing and selections steps make use of stopword lists collected in
-this [google project](https://code.google.com/p/stop-words/).
+- extract dictionary creation from selectors into DictionaryBuilder classes
+- integrate stopwords from this [google project](https://code.google.com/p/stop-words/)
+- remove last bits of PJPP linkage
+- rename gem / find better gem name
+- wrap everything into namespace ^^
+- improve structure under lib
+- cleanup / improve preprocessor structure/code
+- write proper usage guide
+- add example script(s) regarding how to use everything
+- some benchmarking - both memory and speed
 
 ## Contributing
 

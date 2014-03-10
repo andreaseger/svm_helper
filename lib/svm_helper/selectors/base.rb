@@ -83,19 +83,18 @@ module Selector
     # ```
     #
     # @param all_words (see #extract_words)
-    # @params number_of_labels [Integer] how many labels are there, currently only works correctly for 2
     #
     # @return [Hash, Integer, Integer] Hash of apperence count of words per label + number of positiv and negativ vectors
-    def make_bag all_words, number_of_labels=2
-      count_per_label = Array.new(number_of_labels, 0)
+    def make_bag all_words
+      count_per_label = [0,0] # there is only true of false
 
-      accumulator = Hash.new { |h, k| h[k] = Array.new(number_of_labels, 0) }
-      all_words.each do |vector|
-        label = vector.correct ? 1 : 0
+      accumulator = Hash.new { |h, k| h[k] = [0,0] }
+      all_words.each do |data|
+        label = data.correct ? 1 : 0
         count_per_label[label] += 1
-        # only count a feature once per vector
-        vector.features.uniq.each do |word|
-          # increment count for the current word and the label of this vector
+        # only count a feature once per data
+        data.features.uniq.each do |word|
+          # increment count for the current word and the label of this data
           accumulator[word][label] += 1
         end
       end
