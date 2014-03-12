@@ -1,3 +1,3 @@
-class Dictionary < Array
-
+require 'set'
+class Dictionary < SortedSet
 end

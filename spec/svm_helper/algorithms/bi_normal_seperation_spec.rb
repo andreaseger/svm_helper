@@ -30,6 +30,7 @@ describe Algorithms::BiNormalSeperation do
         ).to be_within(0.0001).of(a)
       end
     end
+    # just to make sure the inverse cdf works reliable enough
     it "inverse_cdf(cdf(value)) =~ value" do
       100.times do
         value = rand(-2.0..2.0)
