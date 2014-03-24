@@ -19,6 +19,13 @@ provided algorthms for feature selection:
 - it should be possible to use a Dictionary effective to generate Feature
 Vectors from the data set.
 
+
+- regain compatability with jruby
+- make ruby-stemmer optional as it is a c-extention, handle missing of that gem
+  accordingly.
+- jruby compatability should also mean 1.9 compatability
+- look into changes necessary for supporting rbx
+
 ## stuff to think about
 
 ### multi-label feature vector
