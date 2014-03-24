@@ -15,14 +15,14 @@ describe ParallelHelper do
 
   context "fallback to normal map" do
     before(:each) do
-      ParallelHelper.stubs(:parallel?).returns(false)
+      ParallelHelper.stub(:parallel?).and_return(false)
     end
     it "should just call map on data for p_map" do
-      data.expects(:map)
+      expect(data).to receive(:map)
       p_map(data){|e| e**2 }
     end
     it "should just call map on data for p_map_with_index" do
-      data.expects(:map).returns([].map)
+      expect(data).to receive(:map).and_return([].map)
       p_map_with_index(data){|e| e**2 }
     end
   end

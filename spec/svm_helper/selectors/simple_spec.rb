@@ -23,7 +23,7 @@ describe Selector::Simple do
   end
   context "#extract_words" do
     it "should call extract_words_from_data for each data object" do
-      simple.expects(:extract_words_from_data).times(4)
+      expect(simple).to receive(:extract_words_from_data).exactly(4).times
       simple.extract_words(FactoryGirl.build_list(:data,4))
     end
     it "should return an array of word arrays" do
@@ -67,7 +67,7 @@ describe Selector::Simple do
     let(:vector) { simple.generate_vector(data) }
 
     before(:each) do
-      simple.stubs(:global_dictionary).returns(dictionary)
+      simple.stub(:global_dictionary).and_return(dictionary)
     end
     it "should build a feature vector for each dataset with the size of the dictionary plus classifications" do
       vector.data.should have(5+8).things
@@ -85,7 +85,7 @@ describe Selector::Simple do
       vector.data.last(8).should eq([0,0,0,0,0,0,1,0])
     end
     it "should call make_vector" do
-      simple.expects(:make_vector).once
+      expect(simple).to receive(:make_vector).once
       simple.generate_vector(data)
     end
     context "custom dictionary" do
@@ -100,28 +100,28 @@ describe Selector::Simple do
     let(:data) { FactoryGirl.build_list(:data,2) }
     let(:words_per_data) { [%w(pferd hase flasche),%w(flasche glas hase meer)] }
     before(:each) do
-      simple.stubs(:global_dictionary).returns(dictionary)
+      simple.stub(:global_dictionary).and_return(dictionary)
     end
     it "should call extract words" do
-      simple.expects(:extract_words).returns([])
+      expect(simple).to receive(:extract_words).and_return([])
       simple.generate_vectors(data)
     end
     it "should call generate_global_dictionary" do
-      simple.stubs(:extract_words).returns([])
-      simple.expects(:generate_global_dictionary).returns([])
+      simple.stub(:extract_words).and_return([])
+      expect(simple).to receive(:generate_global_dictionary).and_return([])
       simple.generate_vectors(data)
     end
     it "should call make_vector for each set of words" do
-      simple.stubs(:extract_words).returns(words_per_data)
-      simple.expects(:make_vector).twice
+      simple.stub(:extract_words).and_return(words_per_data)
+      expect(simple).to receive(:make_vector).twice
       simple.generate_vectors(data)
     end
     context "parallel" do
       let(:parallel) { Selector::Simple.new(:function, parallel: true) }
       before(:each) do
         require 'parallel'
-        simple.stubs(:global_dictionary).returns(dictionary)
-        parallel.stubs(:global_dictionary).returns(dictionary)
+        simple.stub(:global_dictionary).and_return(dictionary)
+        parallel.stub(:global_dictionary).and_return(dictionary)
       end
       it "should be equal results in processes" do
         single = simple.generate_vectors(data)

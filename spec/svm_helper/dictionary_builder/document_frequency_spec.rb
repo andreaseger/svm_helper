@@ -8,13 +8,13 @@ describe DictionaryBuilder::DocumentFrequency do
       # dolor: 8
       # lorem: 7
       #   sit: 4
-      [ FactoryGirl.build_list(:data, 4, data: %w(lorem ipsum sit amet)),
+      [ FactoryGirl.build_list(:data, 4, data: [%w(lorem ipsum sit),['amet']]),
         FactoryGirl.build_list(:data, 5, data: %w(ipsum dolor amet)),
         FactoryGirl.build_list(:data, 3, data: %w(lorem dolor amet)) ].flatten.shuffle
     end
     before(:each) do
-      builder = described_class.new(data, size: 3)
-      builder.make
+      builder = described_class.new(data, count: 3)
+      builder.generate
       @dictionary = builder.dictionary
     end
     it "should return a Dictionary with 3 items" do
@@ -29,6 +29,16 @@ describe DictionaryBuilder::DocumentFrequency do
       expect(@dictionary).to_not include("lorem")
       expect(@dictionary).to_not include("sit")
     end
+
+    it "should call generate automatically if dictionary was not yet created" do
+      builder = described_class.new(data, count: 3)
+      expect(builder).to receive(:generate)
+      builder.dictionary
+    end
+    it "should call generate automatically if dictionary was not yet created(2)" do
+      builder = described_class.new(data, count: 3)
+      expect(builder.dictionary).to have(3).items
+    end
   end
   context "equal dictionary counts" do
     let(:data) do
@@ -42,13 +52,15 @@ describe DictionaryBuilder::DocumentFrequency do
         FactoryGirl.build_list(:data, 1, data: %w(lorem ipsum dolor)) ].flatten.shuffle
     end
     it "should pick the tokens by alphabetical order" do
-      builder = described_class.new(data, size: 2)
+      builder = described_class.new(data, count: 2)
+      builder.generate
       dictionary = builder.dictionary
       expect(dictionary).to include("amet")
       expect(dictionary).to_not include('sit')
     end
-    it "should pick the tokens by alphabetical order" do
-      builder = described_class.new(data, size: 4)
+    it "should pick the tokens by alphabetical order(2)" do
+      builder = described_class.new(data, count: 4)
+      builder.generate
       dictionary = builder.dictionary
       expect(dictionary).to include("ipsum")
       expect(dictionary).to_not include('lorem')

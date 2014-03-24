@@ -6,7 +6,7 @@ describe Algorithms::BiNormalSeperation do
   # correctly, but also not expose them
   context "calclate" do
     it "uses the inverse_cumulative_distribution_function twice" do
-      described_class.any_instance.expects(:inverse_cumulative_distribution_function).twice.returns(2)
+      described_class.any_instance.should_receive(:inverse_cumulative_distribution_function).twice.and_return(2)
       described_class.calculate(1,2,3,4)
     end
   end

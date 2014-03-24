@@ -19,7 +19,7 @@ end
 
 group :test do
   gem 'rake'
-  gem 'mocha', require: 'mocha/api'
+  # gem 'mocha', require: 'mocha/api'
   gem 'factory_girl', '~> 4.0'
   gem 'parallel', require: false
 end

@@ -8,7 +8,7 @@ describe "binary encoded classification" do
   let(:vector) { simple.generate_vector(data) }
 
   before(:each) do
-    simple.stubs(:global_dictionary).returns(dictionary)
+    simple.stub(:global_dictionary).and_return(dictionary)
   end
   it "should build a feature vector for each dataset with the size of the dictionary plus classifications" do
     vector.data.should have(5+4).things
@@ -26,7 +26,7 @@ describe "binary encoded classification" do
     vector.data.last(4).should eq([0,1,1,1])
   end
   it "should call make_vector" do
-    simple.expects(:make_vector).once
+    expect(simple).to receive(:make_vector).once
     simple.generate_vector(data)
   end
   context "custom dictionary" do

@@ -31,15 +31,15 @@ describe Preprocessor::Simple do
   context "processing" do
     let(:jobs) { FactoryGirl.build_list(:job,3) }
     before(:each) do
-      simple.stubs(:clean_title)
-      simple.stubs(:clean_description)
+      simple.stub(:clean_title)
+      simple.stub(:clean_description)
     end
     it "should call clean_title on each job" do
-      simple.expects(:clean_title).times(3)
+      expect(simple).to receive(:clean_title).exactly(3).times
       simple.process(jobs)
     end
     it "should call clean_description on each job" do
-      simple.expects(:clean_description).times(3)
+      expect(simple).to receive(:clean_description).exactly(3).times
       simple.process(jobs)
     end
   end
@@ -80,7 +80,7 @@ describe Preprocessor::Simple do
         FactoryGirl.build(:job_description_w_gender) ]
     }
     it "should call strip_stopwords" do
-      simple.expects(:strip_stopwords)
+      expect(simple).to receive(:strip_stopwords)
       simple.clean_description(jobs[0][:description])
     end
     it "should remove html/xml tags" do
@@ -135,7 +135,7 @@ describe Preprocessor::Simple do
     let(:job) { FactoryGirl.build(:job) }
     let(:jobs) { [job] }
     it "should make use of a industry_map" do
-      preprocessor.expects(:map_id)
+      expect(preprocessor).to receive(:map_id)
       preprocessor.process(jobs)
     end
   end
