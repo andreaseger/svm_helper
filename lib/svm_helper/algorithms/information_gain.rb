@@ -26,11 +26,13 @@ module Algorithms
     end
 
     # Entropy is a measure of the uncertainty in a random variable
+    # https://stackoverflow.com/questions/1859554/what-is-entropy-and-information-gain
     # @param [Float] x positives
     # @param [Float] y negatives
     #
     # @return [Float] entropy
     def entropy(x,y)
+      return 0.0 if (x.zero? || y.zero?)
       -xlx(x.quo(x+y)) -xlx(y.quo(x+y))
     end
 

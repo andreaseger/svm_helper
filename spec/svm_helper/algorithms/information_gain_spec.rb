@@ -27,4 +27,16 @@ describe Algorithms::InformationGain do
       end
     end
   end
+  context "edge cases" do
+    it "should work with zero positives / false_positives" do
+      expect(
+        described_class.calculate(0,2,0,1)
+      ).to be_within(0.001).of(0.0)
+    end
+    it "should work with zero negatives / false_negatives" do
+      expect(
+        described_class.calculate(2,0,1,0)
+      ).to be_within(0.001).of(0.0)
+    end
+  end
 end

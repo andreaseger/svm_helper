@@ -1,1 +1,3 @@
 require_relative "dictionary_builder/document_frequency"
+require_relative "dictionary_builder/bi_normal_seperation"
+require_relative "dictionary_builder/information_gain"
