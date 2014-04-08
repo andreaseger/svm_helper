@@ -22,4 +22,6 @@ group :test do
   # gem 'mocha', require: 'mocha/api'
   gem 'factory_girl', '~> 4.0'
   gem 'parallel', require: false
+  #fixed version because of known bug see https://github.com/colszowka/simplecov
+  gem 'simplecov', '~> 0.7.1', require: false
 end

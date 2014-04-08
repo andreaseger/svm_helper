@@ -1,20 +1,20 @@
 require "spec_helper"
 
-describe DictionaryBuilder::BiNormalSeperation do
+describe DictionaryBuilder::BinormalSeparationInformationGain do
   it_behaves_like 'a dictionary builder'
   context "#dictionary" do
     let(:data) do
-      # adipisicing, 0.8416212335729147
-      # labore, 0.6840744024312575
-      # sit, 0.6840744024312571
-      # tempor, 0.4307272992954573
-      # incididunt, 0.41089393427745746
-      # ipsum, 0.41089393427745663
-      # consectetur, 0.2533471031357999
-      # dolor, 0.17738019615965778
-      # et, 0.17738019615965778
-      # amet, 0.1773801961596574
-      # ut, 0.1773801961596574
+      # labore, 0.8470264295340086
+      # sit, 0.767042350912129
+      # ipsum, 0.7565971847453518
+      # dolor, 0.46460414256106275
+      # et, 0.46460414256106275
+      # incididunt, 0.460329213688909
+      # amet, 0.35034036598093393
+      # ut, 0.35034036598093393
+      # tempor, 0.29292044637356957
+      # adipisicing, 0.2788039070847824
+      # consectetur, 0.2275802329366404
       # do, 0.0
       # eiusmod, 0.0
       # elit, 0.0
@@ -33,12 +33,12 @@ describe DictionaryBuilder::BiNormalSeperation do
       @dictionary = builder.dictionary
     end
     it "should return the tokens with the highest scores" do
-      %w(adipisicing labore sit tempor incididunt).each do |word|
+      %w(labore sit ipsum dolor et).each do |word|
         expect(@dictionary).to include(word)
       end
     end
     it "should not include tokens with lower score" do
-      %w(ipsum consectetur dolor et amet ut do eiusmod elit sed).each do |word|
+      %w(incididunt amet ut tempor adipisicing consectetur do eiusmod elit sed).each do |word|
         expect(@dictionary).to_not include(word)
       end
     end

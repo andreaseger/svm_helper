@@ -1,6 +1,10 @@
 require 'bundler'
 Bundler.setup
 Bundler.require(:default, :test)
+
+require 'simplecov'
+SimpleCov.start
+
 require 'svm_helper'
 
 RSpec.configure do |config|

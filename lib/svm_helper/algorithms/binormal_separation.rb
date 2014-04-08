@@ -1,6 +1,6 @@
 require_relative 'base'
 module Algorithms
-  class BiNormalSeperation < Base
+  class BinormalSeparation < Base
 
     def calculate
       inverse_cumulative_distribution_function(true_positive_rate) -

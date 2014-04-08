@@ -6,10 +6,10 @@ module DictionaryBuilder
   #
   # @author Andreas Eger
   #
-  class BiNormalSeperation < Base
+  class BiNormalSeparation < Base
     private
     def fitness(*args)
-      Algorithms::BiNormalSeperation.calculate(*args).abs
+      Algorithms::BinormalSeparation.calculate(*args).abs
     end
   end
 end

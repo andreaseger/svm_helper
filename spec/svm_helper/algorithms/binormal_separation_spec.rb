@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Algorithms::BiNormalSeperation do
+describe Algorithms::BinormalSeparation do
   it_behaves_like 'a algorithm'
   # not ideal to test private methods but I want to make sure it works
   # correctly, but also not expose them
