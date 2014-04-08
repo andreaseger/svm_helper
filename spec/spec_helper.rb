@@ -1,9 +1,13 @@
 require 'bundler'
 Bundler.setup
-Bundler.require(:default, :test)
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
+Bundler.require(:default, :test)
+
 
 require 'svm_helper'
 
