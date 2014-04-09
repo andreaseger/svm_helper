@@ -19,7 +19,7 @@ end
 
 group :test do
   gem 'rake'
-  # gem 'mocha', require: 'mocha/api'
+  gem 'rspec'
   gem 'factory_girl', '~> 4.0'
   gem 'parallel', require: false
   #fixed version because of known bug see https://github.com/colszowka/simplecov

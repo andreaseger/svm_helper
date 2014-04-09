@@ -28,16 +28,16 @@ describe Tokenizer do
   end
   it "should be fine with multiple symbols" do
     token = tokenizer.do('cillum dolore, eu      fugiat nulla pariatur. excepteur ,sint.... occaecat [cupidatat] non')
-    expect(token).to eql(%w(cillum dolore eu fugiat nulla pariatur. excepteur sint occaecat cupidatat non))
+    expect(token).to eql(%w(cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non))
   end
   context "grams" do
     it "should be able to make two grams" do
       token = tokenizer.do('proident sunt in culpa qui officia deserunt mollit anim id est laborum', gram: 2)
-      expect(token).to eql(["proident sunt", "in culpa", "qui officia", "deserunt mollit", "anim id", "est laborum"])
+      expect(token).to eql(["proident sunt", "sunt in", "in culpa", "culpa qui", "qui officia", "officia deserunt", "deserunt mollit", "mollit anim", "anim id", "id est", "est laborum"])
     end
     it "should remove punctuation and unnecessary whitespace within grams" do
       token = tokenizer.do('cillum dolore, eu      fugiat nulla pariatur. excepteur ,sint.... occaecat [cupidatat] non', gram: 2)
-      expect(token).to eql(['cillum dolore', 'eu fugiat', 'nulla pariatur', 'excepteur sint', 'occaecat cupidatat', 'non'))
+      expect(token).to eql(["cillum dolore", "dolore eu", "eu fugiat", "fugiat nulla", "nulla pariatur", "pariatur excepteur", "excepteur sint", "sint occaecat", "occaecat cupidatat", "cupidatat non"])
     end
     3.upto(5) { |n|
       it "can handle #{n}-grams" do
@@ -50,8 +50,9 @@ describe Tokenizer do
       token = tokenizer.do("lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod", gram: [1,2])
       expected_token = ["lorem", "ipsum", "dolor", "sit", "amet", "consectetur",
                         "adipisicing", "elit", "sed", "do", "eiusmod",
-                        'lorem ipsum', 'dolor sit', 'amet consectetur',
-                        'adipisicing elit', 'sed do']
+                        "lorem ipsum", "ipsum dolor", "dolor sit", "sit amet",
+                        "amet consectetur", "consectetur adipisicing",
+                        "adipisicing elit", "elit sed", "sed do", "do eiusmod" ]
       expect(token).to eql(expected_token)
 
     end
