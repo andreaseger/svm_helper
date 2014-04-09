@@ -6,7 +6,7 @@ module ParallelHelper
   #
   # @return [Array] whatever the block does
   def p_map_with_index data, &block
-    if parallel? && RUBY_PLATFORM == 'java'
+    if parallel? && (@parallel == :threads || RUBY_ENGINE =~ /jruby|rbx/)
       Parallel.map_with_index(data, in_threads: THREAD_COUNT, &block )
     elsif parallel?
       Parallel.map_with_index(data, in_processes: THREAD_COUNT, &block )
@@ -20,7 +20,7 @@ module ParallelHelper
   #
   # @return [Array] whatever the block does
   def p_map data, &block
-    if parallel? && RUBY_PLATFORM == 'java'
+    if parallel? && (@parallel == :threads || RUBY_ENGINE =~ /jruby|rbx/)
       Parallel.map(data, in_threads: THREAD_COUNT, &block )
     elsif parallel?
       Parallel.map(data, in_processes: THREAD_COUNT, &block )

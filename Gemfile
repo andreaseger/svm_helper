@@ -3,6 +3,12 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in svm_helper.gemspec
 gemspec
 
+gem 'ruby-stemmer', require: false, platform: :ruby
+gem 'jruby-stemmer', require: false, platform: :jruby
+
+# gem 'racc', platform: :rbx
+# gem 'rubysl', platform: :rbx
+
 group :development do
   gem 'yard'
   gem 'kramdown'

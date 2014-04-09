@@ -23,6 +23,11 @@ And then execute:
 
     $ bundle
 
+## Stemming
+
+If you want to use Stemming while preprocessing add depending on your platform
+`ruby-stemmer` for MRI or `jruby-stemmer` for JRuby to your Gemfile.
+
 ## ToDo
 
 - extract dictionary creation from selectors into DictionaryBuilder classes

@@ -1,5 +1,6 @@
 require_relative 'simple'
-require 'lingua/stemmer'
+require_relative '../helpers/stemmer'
+
 module Preprocessor
   #
   # Preprocessor Base Class
@@ -10,7 +11,7 @@ module Preprocessor
 
     def initialize(args={})
       super
-      @stemmer = Lingua::Stemmer.new(language: @language)
+      @stemmer = ::Stemmer.new(language: @language)
     end
 
     def clean_description desc

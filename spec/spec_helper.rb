@@ -3,6 +3,7 @@ Bundler.setup
 
 require 'simplecov'
 SimpleCov.start do
+  add_filter '/_benchmarks/'
   add_filter '/spec/'
 end
 

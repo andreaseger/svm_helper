@@ -6,7 +6,7 @@ describe Preprocessor::Simple do
 
   let(:simple) { Preprocessor::Simple.new }
   it "should have process implemented" do
-    -> { simple.process([]) }.should_not raise_error
+    expect{ simple.process([]) }.not_to raise_error
   end
   it "should have a label" do
     expect(simple.label).to eq("Preprocessor::Simple")
