@@ -1,0 +1,16 @@
+inherit_from: rubocop-todo.yml
+
+AllCops:
+  Exclude:
+    - '_old/**'
+
+FileName:
+  Exclude:
+    - Guardfile
+
+LineLength:
+  Max: 99
+
+MethodDefParentheses:
+  EnforcedStyle: require_no_parentheses
+
