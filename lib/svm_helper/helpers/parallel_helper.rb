@@ -5,7 +5,7 @@ module ParallelHelper
   # @param [Enum] the enum to map over
   #
   # @return [Array] whatever the block does
-  def p_map_with_index data, &block
+  def p_map_with_index(data, &block)
     if parallel? && (@parallel == :threads || RUBY_ENGINE =~ /jruby|rbx/)
       Parallel.map_with_index(data, in_threads: THREAD_COUNT, &block )
     elsif parallel?
@@ -19,7 +19,7 @@ module ParallelHelper
   # @param [Enum] the enum to map over
   #
   # @return [Array] whatever the block does
-  def p_map data, &block
+  def p_map(data, &block)
     if parallel? && (@parallel == :threads || RUBY_ENGINE =~ /jruby|rbx/)
       Parallel.map(data, in_threads: THREAD_COUNT, &block )
     elsif parallel?

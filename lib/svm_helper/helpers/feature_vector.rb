@@ -25,9 +25,8 @@ class FeatureVector
 
   # comperator
   # @param [FeatureVector] another
-  def == another
+  def ==(another)
     return false if self.class != another.class
-    ATTRS.map { |e| self.send(e) == another.send(e) }.all?
+    ATTRS.map{|e| send(e) == another.send(e)}.all?
   end
-
 end

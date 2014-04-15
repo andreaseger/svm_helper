@@ -5,13 +5,13 @@ text = DATA.read
 n = 20_000
 
 Benchmark.bmbm do |x|
-  x.report("split+reject") do
+  x.report('split+reject') do
     n.times do
-      text.split(/\W/).reject(&:empty?) 
+      text.split(/\W/).reject(&:empty?)
     end
   end
 
-  x.report("scan") do
+  x.report('scan') do
     n.times do
       text.scan(/\w+/)
     end

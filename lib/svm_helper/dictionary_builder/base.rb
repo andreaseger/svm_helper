@@ -26,7 +26,7 @@ module DictionaryBuilder
       @dictionary ||= build_dictionary
     end
 
-    private
+  private
 
     def build_dictionary
       tokens = data.map do |e|
@@ -40,7 +40,7 @@ module DictionaryBuilder
                 [word, fitness(pos, neg, tp, fp)]
               end
       Dictionary.new words.compact.
-                          sort_by{|a| [-a[1],a[0]]}.
+                          sort_by{|a| [-a[1], a[0]]}.
                           first(count).
                           map(&:first)
     end
@@ -65,10 +65,10 @@ module DictionaryBuilder
     # @param all_words (see #extract_words)
     #
     # @return [Hash, Integer, Integer] Hash of apperence count of words per label + number of positiv and negativ vectors
-    def make_bag all_words
-      count_per_label = [0,0] # there is only true of false
+    def make_bag(all_words)
+      count_per_label = [0, 0] # there is only true of false
 
-      accumulator = Hash.new { |h, k| h[k] = [0,0] }
+      accumulator = Hash.new{|h, k| h[k] = [0, 0]}
       all_words.each do |data|
         label = data.correct ? 1 : 0
         count_per_label[label] += 1

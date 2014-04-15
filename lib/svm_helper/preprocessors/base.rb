@@ -7,9 +7,10 @@ module Preprocessor
   #
   class Base
     include ::ParallelHelper
-    def initialize args={}
+    def initialize(args={})
       @parallel = args.fetch(:parallel){false}
     end
+
     def label
       self.class.to_s
     end

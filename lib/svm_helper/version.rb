@@ -1,3 +1,3 @@
 module SvmHelper
-  VERSION = "0.3.0.pre"
+  VERSION = '0.3.0.pre'
 end

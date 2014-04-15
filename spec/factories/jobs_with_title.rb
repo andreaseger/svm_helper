@@ -2,12 +2,12 @@
 # job with title
 FactoryGirl.define do
   factory :job_title_w_gender, parent: :job do
-    title "Berater m/w Citrix"
-    clean_title "berater citrix"
+    title 'Berater m/w Citrix'
+    clean_title 'berater citrix'
   end
   factory :job_title_w_gender_brackets, parent: :job do
-    title "SAP BW Senior Consultant (w/m)"
-    clean_title "sap bw senior consultant"
+    title 'SAP BW Senior Consultant (w/m)'
+    clean_title 'sap bw senior consultant'
   end
   factory :job_title_w_gender_pipe, parent: :job do
     title 'Key Account Manager m|w'
@@ -26,8 +26,8 @@ FactoryGirl.define do
     clean_title 'projektleiter kundenprojekte'
   end
   factory :job_title_w_gender2_brackets, parent: :job do
-    title "Senior JEE Entwickler(in)"
-    clean_title "senior jee entwickler"
+    title 'Senior JEE Entwickler(in)'
+    clean_title 'senior jee entwickler'
   end
   factory :job_title_w_code, parent: :job do
     title 'Hardware Engineer Digital 10344jr'

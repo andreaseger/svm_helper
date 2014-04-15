@@ -15,8 +15,8 @@ class PreprocessedData
 
   # comperator
   # @param [PreprocessedData] another
-  def == another
+  def ==(another)
     return false if self.class != another.class
-    ATTRS.all?{ |e| self.send(e) == another.send(e)}
+    ATTRS.all?{|e| send(e) == another.send(e)}
   end
 end

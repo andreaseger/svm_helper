@@ -1,7 +1,6 @@
 require_relative 'base'
 module Algorithms
   class BinormalSeparation < Base
-
     def calculate
       inverse_cumulative_distribution_function(true_positive_rate) -
       inverse_cumulative_distribution_function(false_positive_rate)
@@ -11,6 +10,7 @@ module Algorithms
     def false_positive_rate
       false_positives.quo(negatives)
     end
+
     def true_positive_rate
       true_positives.quo(positives)
     end
@@ -18,14 +18,15 @@ module Algorithms
     # Square of 2
     SQR2 = Math.sqrt(2)
     # Square of 2 pi
-    SQR2PI = Math.sqrt(2.0*Math::PI)
+    SQR2PI = Math.sqrt(2.0 * Math::PI)
 
     # standard normal cumulative distribution function
     # @param [Float] z
     def cumulative_distribution_function(z)
-      0.5 * (1.0 + Math.erf( z.quo(SQR2) ) )
+      0.5 * (1.0 + Math.erf(z.quo(SQR2)))
     end
 
+    # rubocop:disable LineLength
     # inverse standard normal cumulative distribution function
     # http://www.articlefu.com/articles/cumulative-and-inverse-cumulative-distribution-function-in-ruby
     def inverse_cumulative_distribution_function(p)
@@ -39,22 +40,23 @@ module Algorithms
       x = 0.0
       q = 0.0
       if 0.0 < p && p < p_low
-        q = Math.sqrt(-2.0*Math.log(p))
-        x = (((((c[1]*q+c[2])*q+c[3])*q+c[4])*q+c[5])*q+c[6]) / ((((d[1]*q+d[2])*q+d[3])*q+d[4])*q+1.0)
+        q = Math.sqrt(-2.0 * Math.log(p))
+        x = (((((c[1] * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) * q + c[6]) / ((((d[1] * q + d[2]) * q + d[3]) * q + d[4]) * q + 1.0)
       elsif p_low <= p && p <= p_high
         q = p - 0.5
-        r = q*q
-        x = (((((a[1]*r+a[2])*r+a[3])*r+a[4])*r+a[5])*r+a[6])*q / (((((b[1]*r+b[2])*r+b[3])*r+b[4])*r+b[5])*r+1.0)
+        r = q * q
+        x = (((((a[1] * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * r + a[6]) * q / (((((b[1] * r + b[2]) * r + b[3]) * r + b[4]) * r + b[5]) * r + 1.0)
       elsif p_high < p && p < 1.0
-        q = Math.sqrt(-2.0*Math.log(1.0-p))
-        x = -(((((c[1]*q+c[2])*q+c[3])*q+c[4])*q+c[5])*q+c[6]) / ((((d[1]*q+d[2])*q+d[3])*q+d[4])*q+1.0)
+        q = Math.sqrt(-2.0 * Math.log(1.0 - p))
+        x = -(((((c[1] * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) * q + c[6]) / ((((d[1] * q + d[2]) * q + d[3]) * q + d[4]) * q + 1.0)
       end
       if 0 < p && p < 1
         e = 0.5 * Math.erfc(-x.quo(SQR2)) - p
-        u = e * SQR2PI * Math.exp((x**2.0)/2.0)
-        x = x - u/(1.0 + x*u/2.0)
+        u = e * SQR2PI * Math.exp((x**2.0) / 2.0)
+        x = x - u / (1.0 + x * u / 2.0)
       end
       x
     end
+    # rubocop:enable LineLength
   end
 end

@@ -26,15 +26,14 @@ module Preprocessor
     CODE_TOKEN_FILTER = /\[[^\]]*\]|\([^\)]*\)|\{[^\}]*\}|\S*\d+\w+/
 
     # stopword file
-    #TODO use File.expand_path
-    STOPWORD_LOCATION = File.join(File.dirname(__FILE__),'..','stopwords')
+    # TODO: use File.expand_path
+    STOPWORD_LOCATION = File.join(File.dirname(__FILE__), '..', 'stopwords')
     attr_accessor :language
 
-
-    def initialize args={}
+    def initialize(args={})
       super
       @language = args.fetch(:language){'en'}
-      @stopwords ||= IO.read(File.join(STOPWORD_LOCATION,@language)).split
+      @stopwords ||= IO.read(File.join(STOPWORD_LOCATION, @language)).split
       @id_map = args.fetch(:id_map){false}
     end
 
@@ -52,7 +51,7 @@ module Preprocessor
     # @return [Array<PreprocessedData>] list of processed job data
     def process(jobs)
       if jobs.is_a? Array
-        p_map(jobs) {|job| process_job job }
+        p_map(jobs){|job| process_job job}
       else
         process_job jobs
       end
@@ -64,7 +63,7 @@ module Preprocessor
     #
     # @return [Array<String>] Array of remaining words
     def strip_stopwords(text)
-      (text.split - @stopwords).delete_if { |e| e.size <= 2 }
+      (text.split - @stopwords).delete_if{|e| e.size <= 2}
     end
 
     #
@@ -72,12 +71,12 @@ module Preprocessor
     # @param  title [String] job title
     #
     # @return [String] clean and lowercase version of input
-    def clean_title title
-      title.gsub(GENDER_FILTER,'').
-            gsub(SYMBOL_FILTER,'').
+    def clean_title(title)
+      title.gsub(GENDER_FILTER, '').
+            gsub(SYMBOL_FILTER, '').
             gsub(WORDS_IN_BRACKETS, '\1').
-            gsub(CODE_TOKEN_FILTER,'').
-            gsub(WHITESPACE,' ').
+            gsub(CODE_TOKEN_FILTER, '').
+            gsub(WHITESPACE, ' ').
             downcase.
             strip
     end
@@ -86,23 +85,23 @@ module Preprocessor
     # @param  desc [String] job description
     #
     # @return [String] clean and lowercase version of input
-    def clean_description desc
+    def clean_description(desc)
       strip_stopwords(
-        desc.gsub(XML_TAG_FILTER,' ')
-            .gsub(EMAIL_FILTER,'')
-            .gsub(URL_FILTER,'')
-            .gsub(GENDER_FILTER,'')
-            .gsub(NEW_LINES,'')
-            .gsub(SYMBOL_FILTER,' ')
-            .gsub(WHITESPACE,' ')
+        desc.gsub(XML_TAG_FILTER, ' ')
+            .gsub(EMAIL_FILTER, '')
+            .gsub(URL_FILTER, '')
+            .gsub(GENDER_FILTER, '')
+            .gsub(NEW_LINES, '')
+            .gsub(SYMBOL_FILTER, ' ')
+            .gsub(WHITESPACE, ' ')
             .gsub(WORDS_IN_BRACKETS, '\1')
-            .gsub(CODE_TOKEN_FILTER,'')
+            .gsub(CODE_TOKEN_FILTER, '')
             .downcase
             .strip
         )
     end
 
-    private
+  private
 
     def map_id(id)
       if @id_map
@@ -112,7 +111,7 @@ module Preprocessor
       end
     end
 
-    def process_job job
+    def process_job(job)
       PreprocessedData.new(
         data: [clean_title(job[:title]), clean_description(job[:description])],
         id: map_id(job[:id]),

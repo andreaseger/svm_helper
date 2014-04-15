@@ -1,4 +1,4 @@
-inherit_from: rubocop-todo.yml
+# inherit_from: rubocop-todo.yml
 
 AllCops:
   Exclude:
@@ -11,6 +11,24 @@ FileName:
 LineLength:
   Max: 99
 
-MethodDefParentheses:
-  EnforcedStyle: require_no_parentheses
+AccessModifierIndentation:
+  EnforcedStyle: outdent
 
+MethodDefParentheses:
+  EnforcedStyle: require_parentheses
+
+SpaceBeforeBlockBraces:
+  EnforcedStyle: no_space
+
+SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+SpaceInsideBlockBraces:
+  EnforcedStyle: no_space
+  SupportedStyles:
+    - space
+    - no_space
+  # Valid values are: space, no_space
+  EnforcedStyleForEmptyBraces: no_space
+  # Space between { and |. Overrides EnforcedStyle if there is a conflict.
+  SpaceBeforeBlockParameters: false

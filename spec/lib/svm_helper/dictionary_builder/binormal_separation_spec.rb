@@ -1,8 +1,8 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe DictionaryBuilder::BiNormalSeparation do
   it_behaves_like 'a dictionary builder'
-  context "#dictionary" do
+  context '#dictionary' do
     let(:data) do
       # adipisicing, 0.8416212335729147
       # labore, 0.6840744024312575
@@ -19,25 +19,27 @@ describe DictionaryBuilder::BiNormalSeparation do
       # eiusmod, 0.0
       # elit, 0.0
       # sed, 0.0
-      [ FactoryGirl.build(:data, data: %w(lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod), correct: true),
-        FactoryGirl.build(:data, data: %w(ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor), correct: false),
-        FactoryGirl.build(:data, data: %w(dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt), correct: false),
-        FactoryGirl.build(:data, data: %w(sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut), correct: true),
-        FactoryGirl.build(:data, data: %w(amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore), correct: false),
-        FactoryGirl.build(:data, data: %w(consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et), correct: true),
-        FactoryGirl.build(:data, data: %w(adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore), correct: false),
-        FactoryGirl.build(:data, data: %w(elit sed do eiusmod tempor incididunt ut labore et dolore magna), correct: false)].flatten.shuffle
+      # rubocop:disable LineLength
+      [FactoryGirl.build(:data, data: %w(lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod), correct: true),
+       FactoryGirl.build(:data, data: %w(ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor), correct: false),
+       FactoryGirl.build(:data, data: %w(dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt), correct: false),
+       FactoryGirl.build(:data, data: %w(sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut), correct: true),
+       FactoryGirl.build(:data, data: %w(amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore), correct: false),
+       FactoryGirl.build(:data, data: %w(consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et), correct: true),
+       FactoryGirl.build(:data, data: %w(adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore), correct: false),
+       FactoryGirl.build(:data, data: %w(elit sed do eiusmod tempor incididunt ut labore et dolore magna), correct: false)].flatten.shuffle
+      # rubocop:enable LineLength
     end
     before(:each) do
       builder = described_class.new(data, count: 5)
       @dictionary = builder.dictionary
     end
-    it "should return the tokens with the highest scores" do
+    it 'should return the tokens with the highest scores' do
       %w(adipisicing labore sit tempor incididunt).each do |word|
         expect(@dictionary).to include(word)
       end
     end
-    it "should not include tokens with lower score" do
+    it 'should not include tokens with lower score' do
       %w(ipsum consectetur dolor et amet ut do eiusmod elit sed).each do |word|
         expect(@dictionary).to_not include(word)
       end

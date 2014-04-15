@@ -1,4 +1,4 @@
-require_relative "base"
+require_relative 'base'
 module DictionaryBuilder
   #
   # Feature Selection for Text Classification - HP Labs
@@ -7,7 +7,7 @@ module DictionaryBuilder
   # @author Andreas Eger
   #
   class InformationGain < Base
-    private
+  private
     def fitness(*args)
       Algorithms::InformationGain.calculate(*args).abs
     end

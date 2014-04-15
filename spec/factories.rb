@@ -8,14 +8,13 @@ FactoryGirl.define do
     wrong_career_level nil
   end
   factory :job, class: Hash do
-    title "Meh"
-    description "Foo Bar"
+    title 'Meh'
+    description 'Foo Bar'
     id 4
     label true
 
-    initialize_with { attributes }
+    initialize_with{attributes}
   end
-
 
   factory :data, class: PreprocessedData do
     data %w(haus fooo garten baaz pferd fooo)
@@ -27,12 +26,12 @@ FactoryGirl.define do
     correct false
   end
   factory :data_w_multiple_sections, parent: :data do
-    data [%w(meeh auto),%w(baaz fooo)]
+    data [%w(meeh auto), %w(baaz fooo)]
   end
 
   factory :vector, class: FeatureVector do
     word_data %w(haus fooo garten baaz pferd fooo)
-    classification_array [0,0,1,0]
+    classification_array [0, 0, 1, 0]
     classification 3
     correct true
   end

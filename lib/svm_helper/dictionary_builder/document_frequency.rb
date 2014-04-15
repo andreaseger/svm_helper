@@ -1,4 +1,4 @@
-require_relative "base"
+require_relative 'base'
 module DictionaryBuilder
   #
   # Builds a Dictionary by simply using the words/features with the highest
@@ -20,18 +20,20 @@ module DictionaryBuilder
     def generate
       @dictionary = build_dictionary
     end
+
     def dictionary
       @dictionary ||= build_dictionary
     end
 
-    private
+  private
     def tokenize
       data.flat_map(&:data)
     end
+
     def build_dictionary
       token = tokenize.
                 group_by{|e| e}.
-                sort_by{|a| [-a[1].size,a[0]]}.
+                sort_by{|a| [-a[1].size, a[0]]}.
                 map(&:first)
       Dictionary.new token.first(count)
     end

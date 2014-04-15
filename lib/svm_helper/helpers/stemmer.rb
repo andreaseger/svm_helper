@@ -14,13 +14,14 @@ when 'jruby'
       p "only 'en' stemming available for jruby" if language != 'en'
       @stemmer = Java::OrgTartarusMartinPorter_Stemmer::Stemmer.new
     end
-    def stem string
+
+    def stem(string)
       java_string = string.to_java_string
       stemmer.add java_string.toCharArray, java_string.length
       stemmer.stem
       stemmer.to_string
     end
-    private
+  private
     def stemmer
       @stemmer
     end

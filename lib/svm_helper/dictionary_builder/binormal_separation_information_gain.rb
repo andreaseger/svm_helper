@@ -1,4 +1,4 @@
-require_relative "base"
+require_relative 'base'
 module DictionaryBuilder
   #
   # This Builder uses the geometric Mean of Information Gain and Binormal Separation
@@ -6,7 +6,7 @@ module DictionaryBuilder
   # @author Andreas Eger
   #
   class BinormalSeparationInformationGain < Base
-    private
+  private
     def fitness(*args)
       ig = Algorithms::InformationGain.calculate(*args).abs
       bns = Algorithms::BinormalSeparation.calculate(*args).abs

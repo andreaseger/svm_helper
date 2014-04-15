@@ -13,9 +13,11 @@ module Algorithms
     def false_negatives
       @false_negatives ||= negatives - false_positives
     end
+
     def true_negatives
       @true_negatives ||= positives - true_positives
     end
+
     def total
       @total ||= positives + negatives
     end
@@ -31,9 +33,9 @@ module Algorithms
     # @param [Float] y negatives
     #
     # @return [Float] entropy
-    def entropy(x,y)
-      return 0.0 if (x.zero? || y.zero?)
-      -xlx(x.quo(x+y)) -xlx(y.quo(x+y))
+    def entropy(x, y)
+      return 0.0 if x.zero? || y.zero?
+      -xlx(x.quo(x + y)) - xlx(y.quo(x + y))
     end
 
     # calculates x*log2(x)

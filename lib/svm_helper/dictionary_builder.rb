@@ -1,4 +1,4 @@
-require_relative "dictionary_builder/document_frequency"
-require_relative "dictionary_builder/binormal_separation"
-require_relative "dictionary_builder/information_gain"
-require_relative "dictionary_builder/binormal_separation_information_gain"
+require_relative 'dictionary_builder/document_frequency'
+require_relative 'dictionary_builder/binormal_separation'
+require_relative 'dictionary_builder/information_gain'
+require_relative 'dictionary_builder/binormal_separation_information_gain'
