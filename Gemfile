@@ -17,7 +17,9 @@ group :development do
   gem 'pry'
   gem 'guard-rspec'
   gem 'guard-yard'
+
   gem 'rubocop', require: false, platform: :ruby
+  gem 'coveralls', require: false
 
   gem 'rb-inotify', '~> 0.9', :require => false
   gem 'rb-fsevent', :require => false

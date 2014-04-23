@@ -2,6 +2,11 @@ require 'bundler'
 Bundler.setup
 
 require 'simplecov'
+require 'coveralls'
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
 SimpleCov.start do
   add_filter '/_benchmarks/'
   add_filter '/spec/'
@@ -21,4 +26,9 @@ RSpec.configure do |config|
   Dir['./spec/support/**/*.rb'].each{|f| require f}
 
   FactoryGirl.find_definitions
+
+  config.before(:each) do
+    stub_const('ParallelHelper::THREAD_COUNT',0)
+  end
+
 end
