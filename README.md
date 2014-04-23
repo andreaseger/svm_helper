@@ -4,7 +4,7 @@ This more generalized version of svm helper plans to be more flexible in terms
 of how it can be used as preprocessing steps for Text Classifcation methods.
 
 [![Build Status](https://travis-ci.org/sch1zo/svm_helper.png?branch=full_refactoring)](https://travis-ci.org/sch1zo/svm_helper)
-[![Coverage Status](https://coveralls.io/repos/sch1zo/svm_helper/badge.png)](https://coveralls.io/r/sch1zo/svm_helper)
+[![Coverage Status](https://coveralls.io/repos/sch1zo/svm_helper/badge.png?branch=full_refactoring)](https://coveralls.io/r/sch1zo/svm_helper?branch=full_refactoring)
 
 ** currently only developed for MRI >= 2.0.0 **
 
