@@ -12,7 +12,7 @@ module Preprocessor
     # filters most wierd symbols
     SYMBOL_FILTER = %r{/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}
     # urls and email filter
-    URL_FILTER = /(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/
+    URL_FILTER = %r{(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([/\w \.-]*)*/?}
     EMAIL_FILTER = /([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})/
     # filter for new lines
     NEW_LINES = /(\r\n)|\r|\n/
@@ -30,11 +30,11 @@ module Preprocessor
     STOPWORD_LOCATION = File.join(File.dirname(__FILE__), '..', 'stopwords')
     attr_accessor :language
 
-    def initialize(args={})
+    def initialize args={}
       super
-      @language = args.fetch(:language){'en'}
+      @language = args.fetch(:language){ 'en' }
       @stopwords ||= IO.read(File.join(STOPWORD_LOCATION, @language)).split
-      @id_map = args.fetch(:id_map){false}
+      @id_map = args.fetch(:id_map){ false }
     end
 
     #
@@ -49,9 +49,9 @@ module Preprocessor
     #   @option job [Symbol] label
     #
     # @return [Array<PreprocessedData>] list of processed job data
-    def process(jobs)
+    def process jobs
       if jobs.is_a? Array
-        p_map(jobs){|job| process_job job}
+        p_map(jobs){ |job| process_job job }
       else
         process_job jobs
       end
@@ -62,8 +62,8 @@ module Preprocessor
     # @param text [String] text to strip
     #
     # @return [Array<String>] Array of remaining words
-    def strip_stopwords(text)
-      (text.split - @stopwords).delete_if{|e| e.size <= 2}
+    def strip_stopwords text
+      (text.split - @stopwords).delete_if{ |e| e.size <= 2 }
     end
 
     #
@@ -71,7 +71,7 @@ module Preprocessor
     # @param  title [String] job title
     #
     # @return [String] clean and lowercase version of input
-    def clean_title(title)
+    def clean_title title
       title.gsub(GENDER_FILTER, '').
             gsub(SYMBOL_FILTER, '').
             gsub(WORDS_IN_BRACKETS, '\1').
@@ -85,25 +85,25 @@ module Preprocessor
     # @param  desc [String] job description
     #
     # @return [String] clean and lowercase version of input
-    def clean_description(desc)
+    def clean_description desc
       strip_stopwords(
-        desc.gsub(XML_TAG_FILTER, ' ')
-            .gsub(EMAIL_FILTER, '')
-            .gsub(URL_FILTER, '')
-            .gsub(GENDER_FILTER, '')
-            .gsub(NEW_LINES, '')
-            .gsub(SYMBOL_FILTER, ' ')
-            .gsub(WHITESPACE, ' ')
-            .gsub(WORDS_IN_BRACKETS, '\1')
-            .gsub(CODE_TOKEN_FILTER, '')
-            .downcase
-            .strip
+        desc.gsub(XML_TAG_FILTER, ' ').
+            gsub(EMAIL_FILTER, '').
+            gsub(URL_FILTER, '').
+            gsub(GENDER_FILTER, '').
+            gsub(NEW_LINES, '').
+            gsub(SYMBOL_FILTER, ' ').
+            gsub(WHITESPACE, ' ').
+            gsub(WORDS_IN_BRACKETS, '\1').
+            gsub(CODE_TOKEN_FILTER, '').
+            downcase.
+            strip
         )
     end
 
   private
 
-    def map_id(id)
+    def map_id id
       if @id_map
         @id_map[id]
       else
@@ -111,7 +111,7 @@ module Preprocessor
       end
     end
 
-    def process_job(job)
+    def process_job job
       PreprocessedData.new(
         data: [clean_title(job[:title]), clean_description(job[:description])],
         id: map_id(job[:id]),

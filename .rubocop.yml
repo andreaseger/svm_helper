@@ -2,7 +2,7 @@
 
 AllCops:
   Exclude:
-    - '_old/**'
+    - '_old/**/*'
 
 FileName:
   Exclude:
@@ -15,7 +15,7 @@ AccessModifierIndentation:
   EnforcedStyle: outdent
 
 MethodDefParentheses:
-  EnforcedStyle: require_parentheses
+  EnforcedStyle: require_no_parentheses
 
 SpaceBeforeBlockBraces:
   EnforcedStyle: no_space
@@ -24,11 +24,30 @@ SpaceAroundEqualsInParameterDefault:
   EnforcedStyle: no_space
 
 SpaceInsideBlockBraces:
-  EnforcedStyle: no_space
-  SupportedStyles:
-    - space
-    - no_space
-  # Valid values are: space, no_space
-  EnforcedStyleForEmptyBraces: no_space
-  # Space between { and |. Overrides EnforcedStyle if there is a conflict.
-  SpaceBeforeBlockParameters: false
+  Enabled: false
+  # EnforcedStyle: no_space
+  # SupportedStyles:
+  #   - space
+  #   - no_space
+  # # Valid values are: space, no_space
+  # EnforcedStyleForEmptyBraces: no_space
+  # # Space between { and |. Overrides EnforcedStyle if there is a conflict.
+  # SpaceBeforeBlockParameters: false
+
+DotPosition:
+  EnforcedStyle: trailing
+
+StringLiterals:
+  EnforcedStyle: single_quotes
+
+SignalException:
+  EnforcedStyle: semantic
+
+HashSyntax:
+  EnforcedStyle: ruby19
+
+Documentation:
+  Enabled: false
+
+RegexpLiteral:
+  Enabled: false

@@ -20,7 +20,7 @@ shared_examples_for 'a dictionary builder' do
   end
 
   context '#generate' do
-    let(:builder){described_class.new(data, count: 4)}
+    let(:builder){ described_class.new(data, count: 4) }
     it 'should set dictionary' do
       builder.generate
       expect(builder.dictionary).to_not be_nil
@@ -28,7 +28,7 @@ shared_examples_for 'a dictionary builder' do
   end
 
   context '#dictionary' do
-    let(:builder){described_class.new(data, count: 4)}
+    let(:builder){ described_class.new(data, count: 4) }
     it 'should return a Dictionary' do
       expect(builder.dictionary).to be_a(Dictionary)
     end

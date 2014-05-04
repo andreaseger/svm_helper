@@ -7,7 +7,8 @@ module DictionaryBuilder
   #
   class BinormalSeparationInformationGain < Base
   private
-    def fitness(*args)
+
+    def fitness *args
       ig = Algorithms::InformationGain.calculate(*args).abs
       bns = Algorithms::BinormalSeparation.calculate(*args).abs
       Math.sqrt(ig * bns)

@@ -5,9 +5,9 @@
 #
 class FeatureVector
   ATTRS = [:word_data, :classification, :classification_array, :correct]
-  attr_accessor *ATTRS
+  attr_accessor(*ATTRS)
 
-  def initialize(params={})
+  def initialize params={}
     params.each do |key, value|
       send("#{key}=", value)
     end
@@ -24,9 +24,9 @@ class FeatureVector
   end
 
   # comperator
-  # @param [FeatureVector] another
-  def ==(another)
-    return false if self.class != another.class
-    ATTRS.map{|e| send(e) == another.send(e)}.all?
+  # @param [FeatureVector] other
+  def == other
+    return false if self.class != other.class
+    ATTRS.map{ |e| send(e) == other.send(e) }.all?
   end
 end

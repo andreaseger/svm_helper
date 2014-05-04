@@ -1,6 +1,6 @@
 shared_examples_for 'a selector' do
-  let(:selector){described_class.new(:function)}
-  let(:data){FactoryGirl.build(:data)}
+  let(:selector){ described_class.new(:function) }
+  let(:data){ FactoryGirl.build(:data) }
 
   it 'should return a FeatureVector object' do
     selector.generate_vector(data).should be_a(FeatureVector)

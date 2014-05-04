@@ -9,7 +9,7 @@ module DictionaryBuilder
   #
   class DocumentFrequency
     attr_accessor :data, :count
-    def initialize(data, count: 200)
+    def initialize data, count: 200
       @data = data
       @count = count
     end
@@ -26,14 +26,15 @@ module DictionaryBuilder
     end
 
   private
+
     def tokenize
       data.flat_map(&:data)
     end
 
     def build_dictionary
       token = tokenize.
-                group_by{|e| e}.
-                sort_by{|a| [-a[1].size, a[0]]}.
+                group_by{ |e| e }.
+                sort_by{ |a| [-a[1].size, a[0]] }.
                 map(&:first)
       Dictionary.new token.first(count)
     end

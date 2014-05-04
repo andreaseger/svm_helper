@@ -8,16 +8,18 @@ module Preprocessor
   # @author Andreas Eger
   #
   class Stemming < Simple
-    def initialize(args={})
+    def initialize args={}
       super
       @stemmer = ::Stemmer.new(language: @language)
     end
 
-    def clean_description(desc)
-      super.map{|w| @stemmer.stem(w)}
+    def clean_description desc
+      super.map{ |w| @stemmer.stem(w) }
     end
+
   private
-    def process_job(job)
+
+    def process_job job
       PreprocessedData.new(
         data: [clean_title(job[:title]), clean_description(job[:description])],
         id: job[:id],

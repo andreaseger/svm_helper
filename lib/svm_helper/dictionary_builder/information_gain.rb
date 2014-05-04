@@ -8,7 +8,8 @@ module DictionaryBuilder
   #
   class InformationGain < Base
   private
-    def fitness(*args)
+
+    def fitness *args
       Algorithms::InformationGain.calculate(*args).abs
     end
   end

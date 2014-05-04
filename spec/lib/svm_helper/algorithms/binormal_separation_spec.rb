@@ -6,12 +6,15 @@ describe Algorithms::BinormalSeparation do
   # correctly, but also not expose them
   context 'calclate' do
     it 'uses the inverse_cumulative_distribution_function twice' do
-      described_class.any_instance.should_receive(:inverse_cumulative_distribution_function).twice.and_return(2)
+      described_class.any_instance.
+                      should_receive(:inverse_cumulative_distribution_function).
+                      twice.
+                      and_return(2)
       described_class.calculate(1, 2, 3, 4)
     end
   end
   context 'cdf & inverse_cdf' do
-    let(:algo){described_class.new(1, 2, 3, 4)} # params not important
+    let(:algo){ described_class.new(1, 2, 3, 4) } # params not important
     [
       [0.5, 0.691462],
       [0.3, 0.617911],

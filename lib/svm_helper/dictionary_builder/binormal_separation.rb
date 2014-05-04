@@ -8,7 +8,8 @@ module DictionaryBuilder
   #
   class BiNormalSeparation < Base
   private
-    def fitness(*args)
+
+    def fitness *args
       Algorithms::BinormalSeparation.calculate(*args).abs
     end
   end

@@ -28,7 +28,7 @@ RSpec.configure do |config|
   FactoryGirl.find_definitions
 
   config.before(:each) do
-    stub_const('ParallelHelper::THREAD_COUNT',0)
+    stub_const('ParallelHelper::THREAD_COUNT', 0)
   end
 
 end

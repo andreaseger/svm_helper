@@ -7,7 +7,7 @@ module DictionaryBuilder
   class Base
     include ::ParallelHelper
     attr_accessor :data, :count
-    def initialize(data, count: 200)
+    def initialize data, count: 200
       @data = data
       @count = count
     end
@@ -35,14 +35,15 @@ module DictionaryBuilder
       features, pos, neg = make_bag(tokens)
 
       words = p_map(features) do |word, counts|
-                next if counts.any?(&:zero?) # skip words only appearing in one class
-                tp, fp = counts
-                [word, fitness(pos, neg, tp, fp)]
-              end
-      Dictionary.new words.compact.
-                          sort_by{|a| [-a[1], a[0]]}.
-                          first(count).
-                          map(&:first)
+        next if counts.any?(&:zero?) # skip words only appearing in one class
+        tp, fp = counts
+        [word, fitness(pos, neg, tp, fp)]
+      end
+      Dictionary.new words.
+                     compact.
+                     sort_by{ |a| [-a[1], a[0]] }.
+                     first(count).
+                     map(&:first)
     end
 
     #
@@ -64,11 +65,13 @@ module DictionaryBuilder
     #
     # @param all_words (see #extract_words)
     #
-    # @return [Hash, Integer, Integer] Hash of apperence count of words per label + number of positiv and negativ vectors
-    def make_bag(all_words)
+    # @return [Hash, Integer, Integer] Hash of apperence count of words per
+    #                                  label + number of positiv and negativ
+    #                                  vectors
+    def make_bag all_words
       count_per_label = [0, 0] # there is only true of false
 
-      accumulator = Hash.new{|h, k| h[k] = [0, 0]}
+      accumulator = Hash.new{ |h, k| h[k] = [0, 0] }
       all_words.each do |data|
         label = data.correct ? 1 : 0
         count_per_label[label] += 1

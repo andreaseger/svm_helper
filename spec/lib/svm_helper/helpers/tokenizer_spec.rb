@@ -2,7 +2,7 @@ require 'spec_helper'
 
 # rubocop:disable LineLength
 describe Tokenizer do
-  let(:tokenizer){described_class.new}
+  let(:tokenizer){ described_class.new }
 
   it 'should return an array' do
     token = tokenizer.do('lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod')
@@ -45,7 +45,7 @@ describe Tokenizer do
       it "can handle #{n}-grams" do
         txt = 'proident sunt in culpa qui officia deserunt mollit anim id est laborum'
         token = tokenizer.do(txt, gram: n)
-        expect(token).to eql(txt.split.each_cons(n).map{|e| e.join ' '})
+        expect(token).to eql(txt.split.each_cons(n).map{ |e| e.join ' ' })
       end
     end
     it 'should handle multiple gram sizes at once' do

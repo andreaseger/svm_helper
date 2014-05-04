@@ -10,6 +10,7 @@ module Algorithms
     end
 
   private
+
     def false_negatives
       @false_negatives ||= negatives - false_positives
     end
@@ -33,7 +34,7 @@ module Algorithms
     # @param [Float] y negatives
     #
     # @return [Float] entropy
-    def entropy(x, y)
+    def entropy x, y
       return 0.0 if x.zero? || y.zero?
       -xlx(x.quo(x + y)) - xlx(y.quo(x + y))
     end
@@ -42,7 +43,7 @@ module Algorithms
     # @param [Float] x
     #
     # @return [Float] x*log2(x)
-    def xlx(x)
+    def xlx x
       x * Math.log2(x)
     end
   end

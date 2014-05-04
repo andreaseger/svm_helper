@@ -5,18 +5,18 @@
 #
 class PreprocessedData
   ATTRS = [:data, :id, :correct]
-  attr_accessor *ATTRS
+  attr_accessor(*ATTRS)
 
-  def initialize(params={})
+  def initialize params={}
     params.each do |key, value|
       send("#{key}=", value)
     end
   end
 
   # comperator
-  # @param [PreprocessedData] another
-  def ==(another)
-    return false if self.class != another.class
-    ATTRS.all?{|e| send(e) == another.send(e)}
+  # @param [PreprocessedData] other
+  def == other
+    return false if self.class != other.class
+    ATTRS.all?{ |e| send(e) == other.send(e) }
   end
 end

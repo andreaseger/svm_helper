@@ -7,8 +7,8 @@ module Preprocessor
   #
   class Base
     include ::ParallelHelper
-    def initialize(args={})
-      @parallel = args.fetch(:parallel){false}
+    def initialize args={}
+      @parallel = args.fetch(:parallel){ false }
     end
 
     def label
