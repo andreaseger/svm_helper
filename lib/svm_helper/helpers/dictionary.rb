@@ -1,3 +1,5 @@
 require 'set'
-class Dictionary < SortedSet
+module SvmHelper
+  class Dictionary < SortedSet
+  end
 end

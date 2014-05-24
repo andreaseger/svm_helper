@@ -16,3 +16,8 @@ end
 # guard 'yard' do
 #   watch(%r{lib/.+\.rb})
 # end
+
+guard :rubocop, cli: %w(--display-cop-names --auto-correct) do
+  watch(%r{.+\.rb$})
+  watch(%r{(?:.+/)?\.rubocop\.yml$}) { |m| File.dirname(m[0]) }
+end

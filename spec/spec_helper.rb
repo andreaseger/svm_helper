@@ -15,6 +15,7 @@ end
 Bundler.require(:default, :test)
 
 require 'svm_helper'
+include SvmHelper
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -28,7 +29,7 @@ RSpec.configure do |config|
   FactoryGirl.find_definitions
 
   config.before(:each) do
-    stub_const('ParallelHelper::THREAD_COUNT', 0)
+    stub_const('SvmHelper::ParallelHelper::THREAD_COUNT', 0)
   end
 
 end

@@ -17,6 +17,7 @@ group :development do
   gem 'pry'
   gem 'guard-rspec'
   gem 'guard-yard'
+  gem 'guard-rubocop'
 
   gem 'rubocop', require: false, platform: :ruby
   gem 'coveralls', require: false

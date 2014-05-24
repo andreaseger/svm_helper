@@ -5,3 +5,6 @@ require 'svm_helper/preprocessors'
 require 'svm_helper/algorithms'
 require 'svm_helper/dictionary_builder'
 require 'svm_helper/selectors'
+
+module SvmHelper
+end

@@ -9,7 +9,7 @@ describe Preprocessor::Simple do
     expect{simple.process([])}.not_to raise_error
   end
   it 'should have a label' do
-    expect(simple.label).to eq('Preprocessor::Simple')
+    expect(simple.label).to eq('SvmHelper::Preprocessor::Simple')
   end
   context 'correct flag' do
     before(:each) do
