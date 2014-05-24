@@ -10,9 +10,9 @@ describe DictionaryBuilder::DocumentFrequency do
       # dolor: 8
       # lorem: 7
       #   sit: 4
-      [FactoryGirl.build_list(:data, 4, data: [%w(lorem ipsum sit), ['amet']]),
-       FactoryGirl.build_list(:data, 5, data: %w(ipsum dolor amet)),
-       FactoryGirl.build_list(:data, 3, data: %w(lorem dolor amet))].flatten.shuffle
+      [FactoryGirl.build_list(:data, 4, token: [%w(lorem ipsum sit), ['amet']]),
+       FactoryGirl.build_list(:data, 5, token: %w(ipsum dolor amet)),
+       FactoryGirl.build_list(:data, 3, token: %w(lorem dolor amet))].flatten.shuffle
     end
     before(:each) do
       builder = described_class.new(data, count: 3)
@@ -36,9 +36,9 @@ describe DictionaryBuilder::DocumentFrequency do
       #   sit: 5
       # ipsum: 4
       # lorem: 4
-      [FactoryGirl.build_list(:data, 3, data: %w(lorem ipsum dolor sit amet)),
-       FactoryGirl.build_list(:data, 2, data: %w(dolor sit amet)),
-       FactoryGirl.build_list(:data, 1, data: %w(lorem ipsum dolor))].flatten.shuffle
+      [FactoryGirl.build_list(:data, 3, token: %w(lorem ipsum dolor sit amet)),
+       FactoryGirl.build_list(:data, 2, token: %w(dolor sit amet)),
+       FactoryGirl.build_list(:data, 1, token: %w(lorem ipsum dolor))].flatten.shuffle
     end
     it 'should pick the tokens by alphabetical order' do
       builder = described_class.new(data, count: 2)

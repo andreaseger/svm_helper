@@ -21,7 +21,11 @@ module SvmHelper
 
     # word + encoded classification data
     def data
-      word_data + classification_array
+      if classification_array && !classification_array.empty?
+        word_data + classification_array
+      else
+        word_data
+      end
     end
 
     # comperator

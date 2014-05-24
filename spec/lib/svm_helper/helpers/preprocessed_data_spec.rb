@@ -5,7 +5,7 @@ describe PreprocessedData do
   it 'should be a PreprocessedData' do
     expect(data).to be_a(described_class)
   end
-  [:id, :data, :correct].each do |attr|
+  [:id, :token, :correct].each do |attr|
     it "should respond to #{attr}" do
       expect(data).to respond_to(attr)
     end

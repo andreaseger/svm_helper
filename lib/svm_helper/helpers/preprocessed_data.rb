@@ -5,7 +5,7 @@ module SvmHelper
   # @author Andreas Eger
   #
   class PreprocessedData
-    ATTRS = [:data, :id, :correct]
+    ATTRS = [:token, :id, :correct]
     attr_accessor(*ATTRS)
 
     def initialize params={}

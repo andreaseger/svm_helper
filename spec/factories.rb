@@ -17,16 +17,16 @@ FactoryGirl.define do
   end
 
   factory :data, class: PreprocessedData do
-    data %w(haus fooo garten baaz pferd fooo)
+    token %w(haus fooo garten baaz pferd fooo)
     id 7
     correct true
   end
   factory :data_w_short_words, parent: :data do
-    data %w(auto pferd gooo fooo)
+    token %w(auto pferd gooo fooo)
     correct false
   end
   factory :data_w_multiple_sections, parent: :data do
-    data [%w(meeh auto), %w(baaz fooo)]
+    token [%w(meeh auto), %w(baaz fooo)]
   end
 
   factory :vector, class: FeatureVector do

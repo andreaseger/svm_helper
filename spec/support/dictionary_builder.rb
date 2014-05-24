@@ -5,9 +5,9 @@ shared_examples_for 'a dictionary builder' do
     # dolor: 8
     # lorem: 7
     #   sit: 4
-    [FactoryGirl.build_list(:data, 4, data: [%w(lorem ipsum sit), ['amet']], correct: true),
-     FactoryGirl.build_list(:data, 5, data: %w(ipsum dolor amet), correct: true),
-     FactoryGirl.build_list(:data, 3, data: %w(lorem dolor amet), correct: false)].flatten.shuffle
+    [FactoryGirl.build_list(:data, 4, token: [%w(lorem ipsum sit), ['amet']], correct: true),
+     FactoryGirl.build_list(:data, 5, token: %w(ipsum dolor amet), correct: true),
+     FactoryGirl.build_list(:data, 3, token: %w(lorem dolor amet), correct: false)].flatten.shuffle
   end
   context '#size' do
     1.upto(3) do |n|

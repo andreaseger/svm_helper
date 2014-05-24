@@ -126,7 +126,7 @@ describe Preprocessor::Simple do
     it 'should be the same parallelized' do
       single = simple.process(jobs)
       p_data = parallel.process(jobs)
-      single.each.with_index{|e, i| e.data.should == p_data[i].data}
+      single.each.with_index{|e, i| e.token.should == p_data[i].token}
     end
   end
   context 'id_mapping' do

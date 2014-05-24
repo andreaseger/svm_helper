@@ -20,14 +20,14 @@ describe DictionaryBuilder::BiNormalSeparation do
       # elit, 0.0
       # sed, 0.0
       # rubocop:disable LineLength
-      [FactoryGirl.build(:data, data: %w(lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod), correct: true),
-       FactoryGirl.build(:data, data: %w(ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor), correct: false),
-       FactoryGirl.build(:data, data: %w(dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt), correct: false),
-       FactoryGirl.build(:data, data: %w(sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut), correct: true),
-       FactoryGirl.build(:data, data: %w(amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore), correct: false),
-       FactoryGirl.build(:data, data: %w(consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et), correct: true),
-       FactoryGirl.build(:data, data: %w(adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore), correct: false),
-       FactoryGirl.build(:data, data: %w(elit sed do eiusmod tempor incididunt ut labore et dolore magna), correct: false)].flatten.shuffle
+      [FactoryGirl.build(:data, token: %w(lorem ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod), correct: true),
+       FactoryGirl.build(:data, token: %w(ipsum dolor sit amet consectetur adipisicing elit sed do eiusmod tempor), correct: false),
+       FactoryGirl.build(:data, token: %w(dolor sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt), correct: false),
+       FactoryGirl.build(:data, token: %w(sit amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut), correct: true),
+       FactoryGirl.build(:data, token: %w(amet consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore), correct: false),
+       FactoryGirl.build(:data, token: %w(consectetur adipisicing elit sed do eiusmod tempor incididunt ut labore et), correct: true),
+       FactoryGirl.build(:data, token: %w(adipisicing elit sed do eiusmod tempor incididunt ut labore et dolore), correct: false),
+       FactoryGirl.build(:data, token: %w(elit sed do eiusmod tempor incididunt ut labore et dolore magna), correct: false)].flatten.shuffle
       # rubocop:enable LineLength
     end
     before(:each) do

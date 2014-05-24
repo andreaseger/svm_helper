@@ -8,6 +8,10 @@ module SvmHelper
     class Base
       include ParallelHelper
       attr_accessor :data, :count
+
+      #
+      # @param  data [Array<String>] tokenized text
+      # @param  count: 200 [Integer] size of the dictionary
       def initialize data, count: 200
         @data = data
         @count = count
@@ -30,7 +34,7 @@ module SvmHelper
     private
 
       def build_dictionary
-        tokens = data.map{ |e| { token: e.data.flatten, correct: e.correct } }
+        tokens = data.map{ |e| { token: e.token.flatten, correct: e.correct } }
         features, pos, neg = make_bag(tokens)
 
         words = p_map(features) do |word, counts|

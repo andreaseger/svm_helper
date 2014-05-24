@@ -21,7 +21,7 @@ module SvmHelper
 
       def process_job job
         PreprocessedData.new(
-          data: [clean_title(job[:title]), clean_description(job[:description])],
+          token: [clean_title(job[:title]), clean_description(job[:description])],
           id: job[:id],
           correct: job[:label]
         )

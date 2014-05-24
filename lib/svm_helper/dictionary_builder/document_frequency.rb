@@ -28,15 +28,12 @@ module SvmHelper
 
     private
 
-      def tokenize
-        data.flat_map(&:data)
-      end
-
       def build_dictionary
-        token = tokenize.
-                  group_by{ |e| e }.
-                  sort_by{ |a| [-a[1].size, a[0]] }.
-                  map(&:first)
+        token = data.
+                flat_map(&:token).
+                group_by{ |e| e }.
+                sort_by{ |a| [-a[1].size, a[0]] }.
+                map(&:first)
         Dictionary.new token.first(count)
       end
     end
