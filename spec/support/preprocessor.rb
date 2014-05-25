@@ -1,6 +1,6 @@
 shared_examples_for 'a preprocessor' do
   let(:preprocessor){ described_class.new(1423 => 3, 523 => 54) }
-  let(:job){ FactoryGirl.build(:job) }
+  let(:job){ FactoryGirl.build(:entry) }
   let(:jobs){ [job] }
 
   it{ preprocessor.should respond_to :process }

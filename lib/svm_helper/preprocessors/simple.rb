@@ -23,7 +23,7 @@ module SvmHelper
       WHITESPACE = /(\s| )+/
       # filters all kind of XMl/HTML tags
       XML_TAG_FILTER = /<[^>]+?>/
-      # filter for used job tokens
+      # filter for used entry tokens
       CODE_TOKEN_FILTER = /\[[^\]]*\]|\([^\)]*\)|\{[^\}]*\}|\S*\d+\w+/
 
       # stopword file
@@ -38,22 +38,22 @@ module SvmHelper
       end
 
       #
-      # cleans provided jobs
-      # @overload process(jobs)
-      #   @param jobs [Array<Hash>] list of jobs
-      # @overload process(job)
-      #   @param [Hash] job
-      #   @option job [String] title
-      #   @option job [String] description
-      #   @option job [Integer] id
-      #   @option job [Symbol] label
+      # cleans provided entries
+      # @overload process(entries)
+      #   @param entries [Array<Hash>] list of entries
+      # @overload process(entry)
+      #   @param [Hash] entry
+      #   @option entry [String] title
+      #   @option entry [String] description
+      #   @option entry [Integer] id
+      #   @option entry [Symbol] label
       #
-      # @return [Array<PreprocessedData>] list of processed job data
-      def process jobs
-        if jobs.is_a? Array
-          p_map(jobs){ |job| process_job job }
+      # @return [Array<PreprocessedData>] list of processed entry data
+      def process entries
+        if entries.is_a? Array
+          p_map(entries){ |entry| process_entry entry }
         else
-          process_job jobs
+          process_entry entries
         end
       end
 
@@ -68,37 +68,41 @@ module SvmHelper
 
       #
       # converts string into a cleaner version
-      # @param  title [String] job title
+      # @param  title [String] entry title
       #
       # @return [String] clean and lowercase version of input
-      def clean_title title
-        title.gsub(GENDER_FILTER, '').
-              gsub(SYMBOL_FILTER, '').
-              gsub(WORDS_IN_BRACKETS, '\1').
-              gsub(CODE_TOKEN_FILTER, '').
-              gsub(WHITESPACE, ' ').
-              downcase.
-              strip
-      end
+      # def clean_title title
+      #   title.gsub(GENDER_FILTER, '').
+      #         gsub(SYMBOL_FILTER, '').
+      #         gsub(WORDS_IN_BRACKETS, '\1').
+      #         gsub(CODE_TOKEN_FILTER, '').
+      #         gsub(WHITESPACE, ' ').
+      #         downcase.
+      #         strip
+      # end
       #
       # converts string into a cleaner version
-      # @param  desc [String] job description
+      # @param  desc [String] entry description
       #
       # @return [String] clean and lowercase version of input
-      def clean_description desc
+      def clean_text text
         strip_stopwords(
-          desc.gsub(XML_TAG_FILTER, ' ').
-              gsub(EMAIL_FILTER, '').
-              gsub(URL_FILTER, '').
-              gsub(GENDER_FILTER, '').
-              gsub(NEW_LINES, '').
-              gsub(SYMBOL_FILTER, ' ').
-              gsub(WHITESPACE, ' ').
-              gsub(WORDS_IN_BRACKETS, '\1').
-              gsub(CODE_TOKEN_FILTER, '').
-              downcase.
-              strip
+          text.gsub(XML_TAG_FILTER, ' ')
+              .gsub(EMAIL_FILTER, '')
+              .gsub(URL_FILTER, '')
+              .gsub(GENDER_FILTER, '')
+              .gsub(NEW_LINES, '')
+              .gsub(SYMBOL_FILTER, ' ')
+              .gsub(WHITESPACE, ' ')
+              .gsub(WORDS_IN_BRACKETS, '\1')
+              .gsub(CODE_TOKEN_FILTER, '')
+              .downcase
+              .strip
           )
+      end
+
+      def clean_and_tokenize data
+        tokenizer.do(clean_text(data))
       end
 
     private
@@ -111,12 +115,16 @@ module SvmHelper
         end
       end
 
-      def process_job job
+      def process_entry entry
         PreprocessedData.new(
-          token: [clean_title(job[:title]), clean_description(job[:description])],
-          id: map_id(job[:id]),
-          correct: job[:label]
+          token: clean_and_tokenize(entry[:text]),
+          id: map_id(entry[:id]),
+          correct: entry[:label]
         )
+      end
+
+      def tokenizer
+        @tokenizer ||= Tokenizer.new
       end
     end
   end

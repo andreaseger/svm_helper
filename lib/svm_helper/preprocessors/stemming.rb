@@ -13,18 +13,8 @@ module SvmHelper
         @stemmer = ::Stemmer.new(language: @language)
       end
 
-      def clean_description desc
+      def clean_text text
         super.map{ |w| @stemmer.stem(w) }
-      end
-
-    private
-
-      def process_job job
-        PreprocessedData.new(
-          token: [clean_title(job[:title]), clean_description(job[:description])],
-          id: job[:id],
-          correct: job[:label]
-        )
       end
     end
   end

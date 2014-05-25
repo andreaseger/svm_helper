@@ -2,7 +2,7 @@ module SvmHelper
   class Tokenizer
     def do data, gram: 1
       words = if data.respond_to? :each
-                data.map{ |e| split_string(e) }.flatten
+                data.compact.map{ |e| split_string(e) }.flatten
               else
                 split_string(data)
               end

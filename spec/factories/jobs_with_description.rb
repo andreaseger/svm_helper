@@ -1,20 +1,20 @@
 # encoding: UTF-8
-# jobs with description
+# jobs with text
 FactoryGirl.define do
-  factory :job_description_w_adress, parent: :job do
-    description IO.read('spec/factories/jobs/tmp.html')
+  factory :entry_text_w_adress, parent: :entry do
+    text IO.read('spec/factories/jobs/tmp.html')
   end
-  factory :job_description_w_tags, parent: :job do
-    description IO.read('spec/factories/jobs/tmp2.html')
+  factory :entry_text_w_tags, parent: :entry do
+    text IO.read('spec/factories/jobs/tmp2.html')
   end
-  factory :job_description_w_special, parent: :job do
-    description IO.read('spec/factories/jobs/tmp3.html')
+  factory :entry_text_w_special, parent: :entry do
+    text IO.read('spec/factories/jobs/tmp3.html')
   end
 
-  factory :job_description_w_code_token, parent: :job do
-    description IO.read('spec/factories/jobs/tmp.html')
+  factory :entry_text_w_code_token, parent: :entry do
+    text IO.read('spec/factories/jobs/tmp.html')
   end
-  factory :job_description_w_gender, parent: :job do
-    description IO.read('spec/factories/jobs/tmp.html')
+  factory :entry_text_w_gender, parent: :entry do
+    text IO.read('spec/factories/jobs/tmp.html')
   end
 end

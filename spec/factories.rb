@@ -7,9 +7,9 @@ FactoryGirl.define do
     wrong_function_id 4
     wrong_career_level nil
   end
-  factory :job, class: Hash do
+  factory :entry, class: Hash do
     title 'Meh'
-    description 'Foo Bar'
+    text 'Foo Bar'
     id 4
     label true
 
