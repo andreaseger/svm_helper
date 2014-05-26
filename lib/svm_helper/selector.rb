@@ -1,5 +1,6 @@
 module SvmHelper
   class Selector
+    include ParallelHelper
     attr_accessor :dictionary
     def initialize dictionary
       @dictionary = dictionary

@@ -11,7 +11,7 @@ module SvmHelper
       # filters most gender stuff
       GENDER_FILTER = %r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)}
       # filters most wierd symbols
-      SYMBOL_FILTER = %r{/|-|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}
+      SYMBOL_FILTER = %r{/|-|_|–|:|\+|!|,|\.|\*|\?|/|·|\"|„|•||\||(\S*(&|;)\S*)}
       # urls and email filter
       URL_FILTER = %r{(https?://)?([\da-z\.-]+)\.([a-z\.]{2,6})([/\w \.-]*)*/?}
       EMAIL_FILTER = /([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})/
@@ -62,7 +62,7 @@ module SvmHelper
       #
       # @return [Array<String>] Array of remaining words
       def strip_stopwords text
-        (text.split - @stopwords).delete_if{ |e| e.size <= 2 }
+        (tokenizer.do(text) - @stopwords).delete_if{ |e| e.size <= 3 }
       end
 
       #
@@ -101,7 +101,7 @@ module SvmHelper
       end
 
       def clean_and_tokenize data
-        tokenizer.do(clean_text(data))
+        clean_text(data)
       end
 
     private

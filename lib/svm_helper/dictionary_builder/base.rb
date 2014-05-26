@@ -20,7 +20,8 @@ module SvmHelper
       # generates the dictionary
       #
       # @return [Dictionary]
-      def generate
+      def generate count: count
+        @count = count
         @dictionary = build_dictionary
       end
 
