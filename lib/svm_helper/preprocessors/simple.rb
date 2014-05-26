@@ -43,8 +43,7 @@ module SvmHelper
       #   @param entries [Array<Hash>] list of entries
       # @overload process(entry)
       #   @param [Hash] entry
-      #   @option entry [String] title
-      #   @option entry [String] description
+      #   @option entry [String] text
       #   @option entry [Integer] id
       #   @option entry [Symbol] label
       #
