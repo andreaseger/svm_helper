@@ -5,7 +5,7 @@ module SvmHelper
   # @author Andreas Eger
   #
   class FeatureVector
-    ATTRS = [:word_data, :classification, :classification_array, :correct]
+    ATTRS = [:text_features, :classification, :classification_array, :correct]
     attr_accessor(*ATTRS)
 
     def initialize params={}
@@ -22,9 +22,9 @@ module SvmHelper
     # word + encoded classification data
     def data
       if classification_array && !classification_array.empty?
-        word_data + classification_array
+        text_features + classification_array
       else
-        word_data
+        text_features
       end
     end
 

@@ -30,13 +30,13 @@ FactoryGirl.define do
   end
 
   factory :vector, class: FeatureVector do
-    word_data %w(haus fooo garten baaz pferd fooo)
+    text_features %w(haus fooo garten baaz pferd fooo)
     classification_array [0, 0, 1, 0]
     classification 3
     correct true
   end
   factory :vector_false, parent: :vector do
-    word_data %w(some more words)
+    text_features %w(some more words)
     correct false
   end
 end

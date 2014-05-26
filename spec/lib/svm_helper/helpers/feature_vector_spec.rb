@@ -5,7 +5,7 @@ describe FeatureVector do
   it 'should be a PreprocessedData' do
     expect(data).to be_a(described_class)
   end
-  [:classification, :word_data, :data, :correct].each do |attr|
+  [:classification, :text_features, :data, :correct].each do |attr|
     it "should respond to #{attr}" do
       expect(data).to respond_to(attr)
     end
