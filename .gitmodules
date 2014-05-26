@@ -1,0 +1,3 @@
+[submodule "example/extract"]
+	path = example/extract
+	url = git@github.com:829b530bf874ec120beb.git
