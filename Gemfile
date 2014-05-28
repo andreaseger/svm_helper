@@ -12,7 +12,7 @@ gem 'jruby-stemmer', require: false, platform: :jruby
 group :development do
   gem 'yard'
   gem 'kramdown'
-  gem 'github-markup'
+  # gem 'github-markup'
 
   gem 'pry'
   gem 'guard-rspec'

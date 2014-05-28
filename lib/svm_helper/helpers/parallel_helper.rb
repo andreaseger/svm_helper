@@ -3,7 +3,8 @@ module SvmHelper
     THREAD_COUNT = (ENV['OMP_NUM_THREADS'] || 2).to_i
 
     # works similar to map.with_index
-    # @param [Enum] the enum to map over
+    # @param [Enum] data the enum to map over
+    # @param [block] block
     #
     # @return [Array] whatever the block does
     def p_map_with_index data, &block
@@ -17,7 +18,8 @@ module SvmHelper
     end
 
     # works similar to map
-    # @param [Enum] the enum to map over
+    # @param [Enum] data the enum to map over
+    # @param [block] block
     #
     # @return [Array] whatever the block does
     def p_map data, &block

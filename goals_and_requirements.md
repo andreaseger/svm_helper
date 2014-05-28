@@ -9,17 +9,6 @@
 classifiaction problem. This means a data entry is either in the class(true) or
 not (false)
 
-- creation of a feature dictionary based on trainingsdata and one of the
-provided algorthms for feature selection:
-  - DocumentFrequency
-  - InformationGain
-  - Bi-Normal-Separation
-  - Geometic Mean of Bi-Normal-Seperation and Information Gain
-
-- it should be possible to use a Dictionary effective to generate Feature
-Vectors from the data set.
-
-
 - regain compatability with jruby
 - make ruby-stemmer optional as it is a c-extention, handle missing of that gem
   accordingly.

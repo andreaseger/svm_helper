@@ -79,9 +79,11 @@ module SvmHelper
       #         downcase.
       #         strip
       # end
+      
+
       #
       # converts string into a cleaner version
-      # @param  desc [String] entry description
+      # @param  text [String] entry description
       #
       # @return [String] clean and lowercase version of input
       def clean_text text
