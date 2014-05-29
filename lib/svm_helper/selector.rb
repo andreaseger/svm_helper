@@ -29,11 +29,11 @@ module SvmHelper
     # @return [FeatureVector]
     def make_vector data
       FeatureVector.new(
-        text_features: dictionary.map do |dic_word|
-                         data.token.include?(dic_word) ? 1 : 0
-                       end,
+        text_features:  dictionary.map do |dic_word|
+                          data.token.include?(dic_word) ? 1 : 0
+                        end,
         classification: data.id,
-        correct: data.correct ? 1 : 0
+        correct:        data.correct ? 1 : 0
       )
     end
   end

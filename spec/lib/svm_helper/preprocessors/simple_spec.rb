@@ -34,7 +34,7 @@ describe Preprocessor::Simple do
       simple.stub(:clean_title)
       simple.stub(:clean_text)
     end
-    it "should call clean_and_tokenize" do
+    it 'should call clean_and_tokenize' do
       expect(simple).to receive(:clean_and_tokenize).exactly(3).times
       simple.process(jobs)
     end

@@ -11,6 +11,9 @@ FileName:
 LineLength:
   Max: 99
 
+AlignHash:
+  EnforcedColonStyle: table
+
 AccessModifierIndentation:
   EnforcedStyle: outdent
 

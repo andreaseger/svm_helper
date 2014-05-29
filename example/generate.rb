@@ -2,12 +2,12 @@
 require 'svm_helper'
 require 'json'
 
-data = JSON.parse(IO.read(File.join(__dir__,'../tmp/function_data.5k.json')))
+data = JSON.parse(IO.read(File.join(__dir__, '../tmp/function_data.5k.json')))
 
-data = data.shuffle.first(1_000).map.with_index do |e,i|
+data = data.shuffle.first(1_000).map.with_index do |e, i|
   {
-    text: e['title'] + e['description'],
-    id: i.even? ? e['function_id'].to_i : ((1..19).to_a - [4]).sample,
+    text:  e['title'] + e['description'],
+    id:    i.even? ? e['function_id'].to_i : ((1..19).to_a - [4]).sample,
     label: i.even? ? true : false
   }
 end
@@ -21,4 +21,4 @@ dictionary = d_builder.dictionary
 selector = SvmHelper::Selector.new(dictionary)
 feature_vectors = selector.generate(p_data)
 
-require 'pry'; binding.pry
+puts feature_vectors.first

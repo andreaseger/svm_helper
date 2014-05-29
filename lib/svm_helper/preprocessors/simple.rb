@@ -79,7 +79,6 @@ module SvmHelper
       #         downcase.
       #         strip
       # end
-      
 
       #
       # converts string into a cleaner version
@@ -88,17 +87,17 @@ module SvmHelper
       # @return [String] clean and lowercase version of input
       def clean_text text
         strip_stopwords(
-          text.gsub(XML_TAG_FILTER, ' ')
-              .gsub(EMAIL_FILTER, '')
-              .gsub(URL_FILTER, '')
-              .gsub(GENDER_FILTER, '')
-              .gsub(NEW_LINES, '')
-              .gsub(SYMBOL_FILTER, ' ')
-              .gsub(WHITESPACE, ' ')
-              .gsub(WORDS_IN_BRACKETS, '\1')
-              .gsub(CODE_TOKEN_FILTER, '')
-              .downcase
-              .strip
+          text.gsub(XML_TAG_FILTER, ' ').
+               gsub(EMAIL_FILTER, '').
+               gsub(URL_FILTER, '').
+               gsub(GENDER_FILTER, '').
+               gsub(NEW_LINES, '').
+               gsub(SYMBOL_FILTER, ' ').
+               gsub(WHITESPACE, ' ').
+               gsub(WORDS_IN_BRACKETS, '\1').
+               gsub(CODE_TOKEN_FILTER, '').
+               downcase.
+               strip
           )
       end
 
@@ -118,8 +117,8 @@ module SvmHelper
 
       def process_entry entry
         PreprocessedData.new(
-          token: clean_and_tokenize(entry[:text]),
-          id: map_id(entry[:id]),
+          token:   clean_and_tokenize(entry[:text]),
+          id:      map_id(entry[:id]),
           correct: entry[:label]
         )
       end
