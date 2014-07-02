@@ -3,13 +3,13 @@ shared_examples_for 'a preprocessor' do
   let(:job){ FactoryGirl.build(:entry) }
   let(:jobs){ [job] }
 
-  it{ preprocessor.should respond_to :process }
+  it{ expect(preprocessor).to respond_to :process }
   it 'should return a PreprocessedData object' do
-    preprocessor.process(job).should be_a(PreprocessedData)
+    expect(preprocessor.process(job)).to be_a(PreprocessedData)
   end
   it 'should be able to process multiple jobs' do
     preprocessor.process(jobs).each do |e|
-      e.should be_a(PreprocessedData)
+      expect(e).to be_a(PreprocessedData)
     end
   end
 end

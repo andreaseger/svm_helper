@@ -12,15 +12,15 @@ describe FeatureVector do
   end
   it 'should have a correct? method' do
     data.correct = 1
-    expect(data.correct?).to be_true
+    expect(data.correct?).to be_truthy
 
     data.correct = 0
-    expect(data.correct?).to be_false
+    expect(data.correct?).to be_falsey
   end
   it 'should properly compare objects on ==' do
     data
     data2 = FactoryGirl.build(:vector, classification: [0, 1, 0, 0])
-    expect(data == data.clone).to be_true
-    expect(data == data2).to be_false
+    expect(data == data.clone).to be_truthy
+    expect(data == data2).to be_falsey
   end
 end

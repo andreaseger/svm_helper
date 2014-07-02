@@ -10,11 +10,11 @@ describe ParallelHelper do
       @parallel = true
     end
     it 'should work the same as a normal map' do
-      p_map(data){ |e| e**2 }.should == data.map{ |e| e**2 }
+      expect(p_map(data){ |e| e**2 }).to eq(data.map{ |e| e**2 })
     end
 
     it 'should work the same as a normal map with index' do
-      p_map_with_index(data){ |e, i| e * i }.should == data.map.with_index{ |e, i| e * i }
+      expect(p_map_with_index(data){ |e, i| e * i }).to eq(data.map.with_index{ |e, i| e * i })
     end
   end
 
@@ -23,11 +23,11 @@ describe ParallelHelper do
       @parallel = :threads
     end
     it 'should work the same as a normal map' do
-      p_map(data){ |e| e**2 }.should == data.map{ |e| e**2 }
+      expect(p_map(data){ |e| e**2 }).to eq(data.map{ |e| e**2 })
     end
 
     it 'should work the same as a normal map with index' do
-      p_map_with_index(data){ |e, i| e * i }.should == data.map.with_index{ |e, i| e * i }
+      expect(p_map_with_index(data){ |e, i| e * i }).to eq(data.map.with_index{ |e, i| e * i })
     end
   end
 

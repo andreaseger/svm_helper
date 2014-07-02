@@ -16,23 +16,23 @@ describe Preprocessor::Simple do
       @jobs = FactoryGirl.build_list :entry, 3
     end
     it 'should work with jobs with quality check' do
-      ->{simple.process(@jobs)}.should_not raise_error
+      expect{simple.process(@jobs)}.not_to raise_error
     end
     it 'should set labels to true if quality check exists and is true' do
       @jobs.each{|e| e[:label] = true}
-      simple.process(@jobs).each{|e| e.correct.should be_true}
+      simple.process(@jobs).each{|e| expect(e.correct).to be_truthy}
     end
     it 'should set labels to false if quality check exists and is false' do
       @jobs.each{|e| e[:label] = false}
-      simple.process(@jobs).each{|e| e.correct.should be_false}
+      simple.process(@jobs).each{|e| expect(e.correct).to be_falsey}
     end
   end
 
   context 'processing' do
     let(:jobs){FactoryGirl.build_list(:entry, 3)}
     before(:each) do
-      simple.stub(:clean_title)
-      simple.stub(:clean_text)
+      allow(simple).to receive(:clean_title)
+      allow(simple).to receive(:clean_text)
     end
     it 'should call clean_and_tokenize' do
       expect(simple).to receive(:clean_and_tokenize).exactly(3).times
@@ -88,33 +88,33 @@ describe Preprocessor::Simple do
     end
     it 'should remove html/xml tags' do
       desc = simple.clean_text(jobs[0][:text]).join ' '
-      desc.should_not match(/<(.*?)>/)
+      expect(desc).not_to match(/<(.*?)>/)
     end
     it 'should remove new lines' do
       desc = simple.clean_text(jobs[0][:text]).join ' '
-      desc.should_not match(/\r\n|\n|\r/)
+      expect(desc).not_to match(/\r\n|\n|\r/)
     end
     it 'should remove all special characters' do
       desc = simple.clean_text(jobs[2][:text]).join ' '
-      desc.should_not match(/[^a-z öäü]/i)
+      expect(desc).not_to match(/[^a-z öäü]/i)
     end
     it 'should remove gender tokens' do
       desc = simple.clean_text(jobs[3][:text]).join ' '
-      desc.should_not match(%r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)})
+      expect(desc).not_to match(%r{(\(*(m|w)(\/|\|)(w|m)\)*)|(/-*in)|\(in\)})
     end
     it 'should remove job code token' do
       desc = simple.clean_text(jobs[4][:text]).join ' '
-      desc.should_not match(/\[.*\]|\(.*\)|\{.*\}|\d+\w+/)
+      expect(desc).not_to match(/\[.*\]|\(.*\)|\{.*\}|\d+\w+/)
     end
     it 'should be downcased' do
       desc = simple.clean_text(jobs[2][:text]).join ' '
-      desc.should_not match(/[^a-z öäü]/)
+      expect(desc).not_to match(/[^a-z öäü]/)
     end
   end
 
   context 'strip_stopwords' do
     it "should remove words like 'and' from the text" do
-      simple.strip_stopwords('Dogs and cats').should == %w(Dogs cats)
+      expect(simple.strip_stopwords('Dogs and cats')).to eq(%w(Dogs cats))
     end
   end
   context 'parallel' do
@@ -130,7 +130,7 @@ describe Preprocessor::Simple do
     it 'should be the same parallelized' do
       single = simple.process(jobs)
       p_data = parallel.process(jobs)
-      single.each.with_index{|e, i| e.token.should == p_data[i].token}
+      single.each.with_index{|e, i| expect(e.token).to eq(p_data[i].token)}
     end
   end
   context 'id_mapping' do

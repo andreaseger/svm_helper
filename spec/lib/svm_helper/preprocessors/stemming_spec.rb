@@ -9,6 +9,6 @@ describe Preprocessor::Stemming do
     expect(preprocessor.label).to eq('SvmHelper::Preprocessor::Stemming')
   end
   it 'should reduce words to their stem' do
-    preprocessor.clean_text('developer engineering').should == %w(develop engin)
+    expect(preprocessor.clean_text('developer engineering')).to eq(%w(develop engin))
   end
 end

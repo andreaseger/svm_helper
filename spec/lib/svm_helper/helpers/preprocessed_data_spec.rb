@@ -13,7 +13,7 @@ describe PreprocessedData do
   it 'should properly compare objects on ==' do
     data
     data2 = FactoryGirl.build(:data, id: 45)
-    expect(data == data.clone).to be_true
-    expect(data == data2).to be_false
+    expect(data == data.clone).to be_truthy
+    expect(data == data2).to be_falsey
   end
 end

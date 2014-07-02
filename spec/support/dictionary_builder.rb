@@ -14,7 +14,7 @@ shared_examples_for 'a dictionary builder' do
       it "should return the correct number of features (#{n})" do
         builder = described_class.new(data, count: n)
         dictionary = builder.dictionary
-        expect(dictionary).to have(n).items
+        expect(dictionary.size).to eq(n)
       end
     end
   end

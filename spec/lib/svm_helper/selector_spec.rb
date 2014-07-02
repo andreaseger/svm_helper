@@ -7,11 +7,11 @@ describe Selector do
 
   it "should set 0's and 1's for each word in the dictionary" do
     feature_vector = selector.generate(data)
-    feature_vector.data.first(5).should eq([0, 1, 0, 1, 1])
+    expect(feature_vector.data.first(5)).to eq([0,1,0,1,1])
   end
   it "should set 0's and 1's for each word in the dictionary" do
     feature_vector = selector.generate([data]).first
-    feature_vector.data.first(5).should eq([0, 1, 0, 1, 1])
+    expect(feature_vector.data.first(5)).to eq([0,1,0,1,1])
   end
 
 end
