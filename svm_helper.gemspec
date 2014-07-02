@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = SvmHelper::VERSION
   gem.authors       = ['Andreas Eger']
   gem.email         = ['dev@eger-andreas.de']
-  gem.description   = %q(helper classes to create FeatureVectors from text)
+  gem.description   = 'helper classes to create FeatureVectors from text'
   gem.summary       = <<-EOF.gsub(/^ +/, '')
                       Helpers for preprocessing text, build dictionaries from
                       training data and create feature vectors based on a
